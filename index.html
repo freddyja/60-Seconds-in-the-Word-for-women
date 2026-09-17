@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kingdom Sisters — 60 Seconds in the Word</title>
+
+<!-- PWA / app-shell setup -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7a3350">
+<meta name="description" content="A one-minute daily devotional for Kingdom Sisters — English, Spanish, and Portuguese.">
+
+<!-- iOS home-screen support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KS 60 Sec">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+<!-- icons -->
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<style>
+  :root{
+    --bg:#f7f0ee;
+    --card:#ffffff;
+    --ink:#231f1a;
+    --ink-soft:#5a534a;
+    --accent:#7a3350;
+    --accent-soft:#b5657f;
+    --line:#e3dccd;
+    --gold:#b08d3e;
+    --shadow: 0 10px 30px rgba(35,31,26,0.10);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1c1216;
+      --card:#28191f;
+      --ink:#f2ece1;
+      --ink-soft:#b8ad9c;
+      --accent:#d98aa8;
+      --accent-soft:#b5657f;
+      --line:#3a322a;
+      --gold:#d8bd6e;
+      --shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1c1216;
+    --card:#28191f;
+    --ink:#f2ece1;
+    --ink-soft:#b8ad9c;
+    --accent:#d98aa8;
+    --accent-soft:#b5657f;
+    --line:#3a322a;
+    --gold:#d8bd6e;
+    --shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+  .wrap{
+    width:100%;
+    max-width:640px;
+  }
+  header{
+    text-align:center;
+    margin-bottom:28px;
+  }
+  .brand{
+    font-size:13px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight:600;
+  }
+  h1{
+    font-size:32px;
+    margin:6px 0 4px;
+    letter-spacing:0.5px;
+  }
+  .tagline{
+    color:var(--ink-soft);
+    font-size:14px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .controls{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .lang-toggle{
+    display:flex;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:3px;
+    box-shadow: var(--shadow);
+  }
+  .lang-toggle button{
+    border:none;
+    background:transparent;
+    color:var(--ink-soft);
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .lang-toggle button.active{
+    background:var(--accent);
+    color:#fff;
+  }
+  .streak{
+    font-size:12px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .streak b{ color:var(--accent); }
+
+  .card{
+    background:var(--card);
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+    padding:28px 24px 24px;
+    margin-bottom:18px;
+  }
+  .ref{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .title{
+    font-size:24px;
+    font-weight:700;
+    margin:0 0 16px;
+    color:var(--accent);
+    line-height:1.25;
+  }
+  blockquote{
+    margin:0 0 18px;
+    padding-left:14px;
+    border-left:3px solid var(--accent-soft);
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:16px;
+    line-height:1.55;
+  }
+  .body p{
+    font-size:16.5px;
+    line-height:1.7;
+    margin:0 0 14px;
+  }
+  .body p:last-child{margin-bottom:0;}
+  .body strong{ color:var(--accent); }
+
+  .questions{
+    margin-top:6px;
+  }
+  .questions-title{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    margin:0 0 10px;
+  }
+  .q{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+    font-size:15.5px;
+    line-height:1.55;
+  }
+  .q .num{
+    flex:0 0 auto;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:var(--accent);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    margin-top:2px;
+  }
+
+  .nav{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .nav button{
+    width:100%;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+    padding:12px 14px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow: var(--shadow);
+  }
+  .nav button:active{ transform: translateY(1px); }
+  .mark-read{
+    background:var(--accent) !important;
+    color:#fff !important;
+    border-color:var(--accent) !important;
+  }
+  .mark-read.done{
+    background:#4c7a52 !important;
+    border-color:#4c7a52 !important;
+  }
+
+  .top-nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .top-nav button{
+    background:none;
+    border:none;
+    padding:4px 2px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.2px;
+    cursor:pointer;
+  }
+  .top-nav button:active{ opacity:0.7; }
+  .top-nav .prevBtn{ color:#c2436a; }
+  .top-nav .nextBtn{ color:var(--ink-soft); }
+
+  .install-btn{
+    display:block;
+    margin:0 auto 18px;
+    background:none;
+    border:1px dashed var(--gold);
+    color:var(--gold);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size:12px;
+    font-weight:700;
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .install-btn:active{ opacity:0.7; }
+
+  .dots{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin:18px 0 6px;
+  }
+  .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--line);
+    cursor:pointer;
+  }
+  .dot.active{ background:var(--accent); }
+
+  footer{
+    text-align:center;
+    margin-top:24px;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Kingdom Sisters</div>
+    <h1>60 Seconds in the Word</h1>
+    <div class="tagline">A minute with the Word, sister.</div>
+  </header>
+
+  <div class="controls">
+    <div class="lang-toggle" id="langToggle">
+      <button data-lang="en" class="active">EN</button>
+      <button data-lang="es">ES</button>
+      <button data-lang="pt">PT</button>
+    </div>
+    <div class="streak" id="streakLabel"></div>
+  </div>
+
+  <button id="installBtn" class="install-btn" hidden>⤓ Install App</button>
+
+  <div class="top-nav">
+    <button id="prevBtn" class="prevBtn">← Prev</button>
+    <button id="nextBtn" class="nextBtn">Next →</button>
+  </div>
+
+  <div class="card">
+    <div class="ref" id="refLine"></div>
+    <blockquote id="verseLine"></blockquote>
+    <div class="title" id="titleLine"></div>
+    <div class="body" id="bodyLines"></div>
+  </div>
+
+  <div class="card">
+    <div class="questions-title" id="qTitle">Discussion Questions</div>
+    <div class="questions" id="questionsList"></div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+
+  <div class="nav">
+    <button id="markBtn" class="mark-read">Mark Read</button>
+  </div>
+
+  <footer>Chosen · Peace · Strength — Kingdom Sisters devotional series</footer>
+</div>
+
+<script>
+const UI_TEXT = {
+  en: { q: "Discussion Questions", prev: "← Prev", next: "Next →", mark: "Mark Read", done: "Read ✓", streak: (n) => `<b>${n}</b> day${n===1?'':'s'} read` },
+  es: { q: "Preguntas para el grupo", prev: "← Anterior", next: "Siguiente →", mark: "Marcar leído", done: "Leído ✓", streak: (n) => `<b>${n}</b> día${n===1?'':'s'} leído${n===1?'':'s'}` },
+  pt: { q: "Perguntas para o grupo", prev: "← Anterior", next: "Próximo →", mark: "Marcar como lido", done: "Lido ✓", streak: (n) => `<b>${n}</b> dia${n===1?'':'s'} lido${n===1?'':'s'}` }
+};
+
+const DEVOTIONALS = [
+{
+  id: "chosen",
+  en: {
+    ref: "1 Peter 2:9",
+    verse: "“But you are a chosen race, a royal priesthood, a holy nation, a people for his own possession, that you may proclaim the excellencies of him who called you out of darkness into his marvelous light.”",
+    title: "Chosen, Not Earned",
+    body: [
+      "Every woman in this room has, at some point, tried to qualify for love — worked to be chosen, worried she wasn't enough, wondered if she'd finally done enough to belong.",
+      "Peter doesn't describe believers as women who earned a spot. He describes them as already chosen — a people for God's own possession, called out of darkness before they proved anything.",
+      "This is identity given, not identity achieved. You are not on trial waiting for the verdict. The verdict already came in: chosen.",
+      "The excellencies you're called to proclaim aren't your own résumé. They're His — what He did to bring you from darkness into light.",
+      "<strong>Sisters, stop auditioning for a role you were already given.</strong>",
+      "Live from being chosen, not toward being chosen."
+    ],
+    questions: [
+      "Where have you been trying to earn a sense of belonging or worth that God has already freely given you?",
+      "What does it change to know your identity was decided before you did anything to deserve it?",
+      "What would it look like this week to rest in being chosen instead of performing for it?"
+    ]
+  },
+  es: {
+    ref: "1 Pedro 2:9",
+    verse: "“Mas vosotros sois linaje escogido, real sacerdocio, nación santa, pueblo adquirido por Dios, para que anunciéis las virtudes de aquel que os llamó de las tinieblas a su luz admirable.”",
+    title: "Escogida, No Ganada",
+    body: [
+      "Cada mujer en este grupo ha intentado, en algún momento, calificar para el amor — trabajar para ser elegida, preocuparse de no ser suficiente, preguntarse si finalmente había hecho lo suficiente para pertenecer.",
+      "Pedro no describe a las creyentes como mujeres que se ganaron un lugar. Las describe como ya escogidas — un pueblo adquirido por Dios, llamadas de las tinieblas antes de probar algo.",
+      "Esta es una identidad dada, no una identidad lograda. No estás en juicio esperando el veredicto. El veredicto ya llegó: escogida.",
+      "Las virtudes que estás llamada a anunciar no son tu propio currículum. Son las de Él — lo que Él hizo para traerte de las tinieblas a la luz.",
+      "<strong>Hermanas, dejen de audicionar para un papel que ya les fue dado.</strong>",
+      "Vivan desde ser escogidas, no hacia ser escogidas."
+    ],
+    questions: [
+      "¿Dónde has estado tratando de ganarte un sentido de pertenencia o valor que Dios ya te dio libremente?",
+      "¿Qué cambia al saber que tu identidad fue decidida antes de que hicieras algo para merecerla?",
+      "¿Cómo se vería esta semana descansar en ser escogida en lugar de actuar para conseguirlo?"
+    ]
+  },
+  pt: {
+    ref: "1 Pedro 2:9",
+    verse: "“Mas vós sois a geração eleita, o sacerdócio real, a nação santa, o povo adquirido, para que anuncieis as virtudes daquele que vos chamou das trevas para a sua maravilhosa luz.”",
+    title: "Escolhida, Não Conquistada",
+    body: [
+      "Toda mulher neste grupo já tentou, em algum momento, se qualificar para o amor — trabalhar para ser escolhida, se preocupar em não ser suficiente, se perguntar se finalmente tinha feito o bastante para pertencer.",
+      "Pedro não descreve as crentes como mulheres que conquistaram um lugar. Ele as descreve como já escolhidas — um povo adquirido por Deus, chamadas das trevas antes de provar qualquer coisa.",
+      "Essa é uma identidade dada, não uma identidade conquistada. Você não está em julgamento esperando o veredito. O veredito já chegou: escolhida.",
+      "As virtudes que você é chamada a anunciar não são o seu currículo. São dele — o que Ele fez para te trazer das trevas para a luz.",
+      "<strong>Irmãs, parem de fazer teste para um papel que já foi dado a vocês.</strong>",
+      "Vivam a partir de serem escolhidas, não em direção a serem escolhidas."
+    ],
+    questions: [
+      "Onde você tem tentado conquistar um senso de pertencimento ou valor que Deus já te deu de graça?",
+      "O que muda ao saber que a sua identidade foi decidida antes de você fazer qualquer coisa para merecê-la?",
+      "Como seria esta semana descansar em ser escolhida em vez de atuar para consegui-lo?"
+    ]
+  }
+},
+{
+  id: "peace",
+  en: {
+    ref: "Philippians 4:6-7",
+    verse: "“Do not be anxious about anything, but in everything by prayer and supplication with thanksgiving let your requests be made known to God. And the peace of God, which surpasses all understanding, will guard your hearts and your minds in Christ Jesus.”",
+    title: "Peace That Doesn't Make Sense",
+    body: [
+      "Paul doesn't say pray and the circumstance will change. He says pray, and something better than the circumstance changing will happen — a peace that doesn't require the situation to resolve first.",
+      "Most women manage anxiety by trying to control outcomes. Paul offers a different move: bring it to God with thanksgiving, before the outcome is known.",
+      "The peace described here doesn't make logical sense — it surpasses understanding. It's not the absence of a hard situation. It's presence in the middle of one.",
+      "This peace guards — a military term. It stands watch over your heart and mind, protecting them from the anxiety trying to get back in.",
+      "<strong>Sisters, you don't need the answer before you can have the peace.</strong>",
+      "Bring the specific thing to Him today — by name, with thanks — and let the peace stand guard while the answer is still unfolding."
+    ],
+    questions: [
+      "What's the specific thing you're carrying anxiety about right now?",
+      "Have you been waiting for the situation to resolve before you feel at peace about it?",
+      "What would it look like to bring this to God with thanksgiving today, even before it's resolved?"
+    ]
+  },
+  es: {
+    ref: "Filipenses 4:6-7",
+    verse: "“Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias. Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones y vuestros pensamientos en Cristo Jesús.”",
+    title: "Una Paz Que No Tiene Sentido",
+    body: [
+      "Pablo no dice que ores y la circunstancia cambiará. Dice que ores, y algo mejor que el cambio de circunstancia sucederá — una paz que no requiere que la situación se resuelva primero.",
+      "La mayoría de las mujeres manejan la ansiedad tratando de controlar los resultados. Pablo ofrece un movimiento diferente: llévalo a Dios con acción de gracias, antes de que se conozca el resultado.",
+      "La paz descrita aquí no tiene sentido lógico — sobrepasa el entendimiento. No es la ausencia de una situación difícil. Es la presencia en medio de ella.",
+      "Esta paz guarda — un término militar. Vigila tu corazón y tu mente, protegiéndolos de la ansiedad que intenta volver a entrar.",
+      "<strong>Hermanas, no necesitan la respuesta antes de poder tener la paz.</strong>",
+      "Lleven lo específico a Él hoy — por nombre, con acción de gracias — y dejen que la paz haga guardia mientras la respuesta todavía se está desarrollando."
+    ],
+    questions: [
+      "¿Cuál es lo específico por lo que estás cargando ansiedad ahora mismo?",
+      "¿Has estado esperando a que la situación se resuelva antes de sentir paz al respecto?",
+      "¿Cómo se vería llevar esto a Dios con acción de gracias hoy, incluso antes de que se resuelva?"
+    ]
+  },
+  pt: {
+    ref: "Filipenses 4:6-7",
+    verse: "“Não estejais inquietos por coisa alguma; antes as vossas petições sejam em tudo conhecidas diante de Deus, pela oração e súplicas, com ação de graças. E a paz de Deus, que excede todo o entendimento, guardará os vossos corações e os vossos sentimentos em Cristo Jesus.”",
+    title: "Uma Paz Que Não Faz Sentido",
+    body: [
+      "Paulo não diz que ore e a circunstância vai mudar. Ele diz que ore, e algo melhor do que a mudança de circunstância vai acontecer — uma paz que não exige que a situação se resolva primeiro.",
+      "A maioria das mulheres lida com a ansiedade tentando controlar os resultados. Paulo oferece um movimento diferente: leve isso a Deus com ação de graças, antes de saber o resultado.",
+      "A paz descrita aqui não faz sentido lógico — ela excede o entendimento. Não é a ausência de uma situação difícil. É a presença no meio dela.",
+      "Essa paz guarda — um termo militar. Ela vigia o seu coração e a sua mente, protegendo-os da ansiedade que tenta voltar a entrar.",
+      "<strong>Irmãs, vocês não precisam da resposta antes de poder ter a paz.</strong>",
+      "Levem o que é específico a Ele hoje — pelo nome, com ação de graças — e deixem a paz fazer guarda enquanto a resposta ainda está se revelando."
+    ],
+    questions: [
+      "Qual é a coisa específica pela qual você está carregando ansiedade agora?",
+      "Você tem esperado a situação se resolver antes de sentir paz sobre ela?",
+      "Como seria trazer isso a Deus com ação de graças hoje, mesmo antes de ser resolvido?"
+    ]
+  }
+},
+{
+  id: "strength",
+  en: {
+    ref: "Proverbs 31:25",
+    verse: "“Strength and dignity are her clothing, and she laughs at the time to come.”",
+    title: "Strength Dressed in Grace",
+    body: [
+      "This woman isn't described by what she wears on the outside first. She's described by what she's clothed in on the inside — strength and dignity, worn like a garment, visible before she says a word.",
+      "“She laughs at the time to come” isn't naivety about hard days ahead. It's confidence rooted somewhere sturdier than her circumstances — earlier in the chapter, her strength is tied to fearing the Lord, not to controlling outcomes.",
+      "Strength here isn't hardness. It's paired with dignity — a woman who can be soft and immovable at the same time, because her security doesn't come from managing every variable.",
+      "Most women are taught to brace for the future. This verse pictures something different: laughing at it, not because it's guaranteed to be easy, but because she's already clothed for it.",
+      "<strong>Sisters, you don't need to know what's coming to be dressed for it.</strong>",
+      "Let strength and dignity be what people notice first — not because you performed it, but because it's what you're actually wearing."
+    ],
+    questions: [
+      "Where do you brace for the future instead of feeling clothed and ready for it?",
+      "What does it look like for your strength to come from reverence for God rather than from controlling your circumstances?",
+      "What's one place this week you could let dignity, not anxiety, be your first response?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:25",
+    verse: "“Fuerza y honor son su vestidura; y se ríe de lo por venir.”",
+    title: "Fortaleza Vestida de Gracia",
+    body: [
+      "Esta mujer no se describe primero por lo que lleva puesto por fuera. Se describe por lo que lleva puesto por dentro — fuerza y honor, como una vestidura, visible antes de que diga una palabra.",
+      "“Se ríe de lo por venir” no es ingenuidad sobre los días difíciles que se acercan. Es una confianza arraigada en algo más firme que sus circunstancias — antes en el capítulo, su fuerza se relaciona con el temor al Señor, no con controlar los resultados.",
+      "La fuerza aquí no es dureza. Va acompañada de honor — una mujer que puede ser suave e inamovible al mismo tiempo, porque su seguridad no viene de manejar cada variable.",
+      "A la mayoría de las mujeres se les enseña a prepararse para lo peor del futuro. Este versículo muestra algo diferente: reírse de él, no porque esté garantizado que será fácil, sino porque ella ya está vestida para eso.",
+      "<strong>Hermanas, no necesitan saber lo que viene para estar vestidas para ello.</strong>",
+      "Que la fuerza y el honor sean lo primero que la gente note — no porque lo actuaron, sino porque es lo que realmente llevan puesto."
+    ],
+    questions: [
+      "¿Dónde te preparas para lo peor del futuro en lugar de sentirte vestida y lista para él?",
+      "¿Cómo se vería que tu fuerza venga de la reverencia a Dios en lugar de controlar tus circunstancias?",
+      "¿En qué lugar esta semana podrías dejar que el honor, no la ansiedad, sea tu primera respuesta?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:25",
+    verse: "“Força e honra são os seus vestidos, e ri-se do dia futuro.”",
+    title: "Força Vestida de Graça",
+    body: [
+      "Essa mulher não é descrita primeiro pelo que veste por fora. Ela é descrita pelo que veste por dentro — força e honra, como uma roupa, visível antes de ela dizer uma palavra.",
+      "“Ri-se do dia futuro” não é ingenuidade sobre os dias difíceis que vêm. É uma confiança enraizada em algo mais firme que suas circunstâncias — antes no capítulo, a força dela está ligada ao temor do Senhor, não a controlar resultados.",
+      "Força aqui não é dureza. Ela vem junto com honra — uma mulher que pode ser suave e inabalável ao mesmo tempo, porque a segurança dela não vem de administrar cada variável.",
+      "A maioria das mulheres é ensinada a se preparar para o pior do futuro. Este versículo mostra algo diferente: rir dele, não porque está garantido que será fácil, mas porque ela já está vestida para isso.",
+      "<strong>Irmãs, vocês não precisam saber o que vem para estarem vestidas para isso.</strong>",
+      "Que força e honra sejam o que as pessoas notam primeiro — não porque foi atuado, mas porque é o que vocês realmente estão vestindo."
+    ],
+    questions: [
+      "Onde você se prepara para o pior do futuro em vez de se sentir vestida e pronta para ele?",
+      "Como seria a sua força vir da reverência a Deus em vez de controlar suas circunstâncias?",
+      "Em qual lugar esta semana você poderia deixar a honra, não a ansiedade, ser sua primeira resposta?"
+    ]
+  }
+}
+];
+
+let lang = 'en';
+let idx = 0;
+const STORAGE_KEY = 'kingdom_sisters_read_days';
+
+function getReadSet(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  }catch(e){ return new Set(); }
+}
+function saveReadSet(set){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify([...set])); }catch(e){}
+}
+
+function render(){
+  const d = DEVOTIONALS[idx][lang];
+  const ui = UI_TEXT[lang];
+
+  document.getElementById('refLine').textContent = d.ref;
+  document.getElementById('verseLine').textContent = d.verse;
+  document.getElementById('titleLine').textContent = d.title;
+
+  const bodyEl = document.getElementById('bodyLines');
+  bodyEl.innerHTML = d.body.map(p => `<p>${p}</p>`).join('');
+
+  document.getElementById('qTitle').textContent = ui.q;
+  const qList = document.getElementById('questionsList');
+  qList.innerHTML = d.questions.map((q,i) => `
+    <div class="q"><div class="num">${i+1}</div><div>${q}</div></div>
+  `).join('');
+
+  document.getElementById('prevBtn').textContent = ui.prev;
+  document.getElementById('nextBtn').textContent = ui.next;
+
+  // dots
+  const dotsEl = document.getElementById('dots');
+  dotsEl.innerHTML = DEVOTIONALS.map((_,i) =>
+    `<div class="dot ${i===idx?'active':''}" data-i="${i}"></div>`
+  ).join('');
+  dotsEl.querySelectorAll('.dot').forEach(el=>{
+    el.addEventListener('click', ()=>{ idx = parseInt(el.dataset.i); render(); });
+  });
+
+  // read state
+  const readSet = getReadSet();
+  const key = DEVOTIONALS[idx].id;
+  const markBtn = document.getElementById('markBtn');
+  if(readSet.has(key)){
+    markBtn.textContent = ui.done;
+    markBtn.classList.add('done');
+  } else {
+    markBtn.textContent = ui.mark;
+    markBtn.classList.remove('done');
+  }
+  document.getElementById('streakLabel').innerHTML = ui.streak(readSet.size);
+}
+
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  idx = (idx - 1 + DEVOTIONALS.length) % DEVOTIONALS.length;
+  render();
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  idx = (idx + 1) % DEVOTIONALS.length;
+  render();
+});
+document.getElementById('markBtn').addEventListener('click', ()=>{
+  const readSet = getReadSet();
+  const key = DEVOTIONALS[idx].id;
+  if(readSet.has(key)) readSet.delete(key); else readSet.add(key);
+  saveReadSet(readSet);
+  render();
+});
+document.getElementById('langToggle').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  lang = btn.dataset.lang;
+  document.querySelectorAll('#langToggle button').forEach(b=>b.classList.toggle('active', b===btn));
+  render();
+});
+
+// open on today's devotional (rotates through the set by day-of-year)
+const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+idx = dayOfYear % DEVOTIONALS.length;
+
+render();
+
+// register service worker for offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+
+// Android/Chrome "Add to Home Screen" prompt
+let deferredInstallPrompt = null;
+const installBtn = document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  installBtn.hidden = false;
+});
+installBtn.addEventListener('click', async () => {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  installBtn.hidden = true;
+});
+window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
+</script>
+</body>
+</html>
