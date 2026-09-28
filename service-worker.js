@@ -1,6 +1,6 @@
 // Bump this version any time index.html (or the devotional content) changes,
 // so returning visitors get the update instead of a stale cached copy.
-const CACHE_NAME = 'kingdom-sisters-60-seconds-v5';
+const CACHE_NAME = 'kingdom-sisters-60-seconds-v6';
 
 const APP_SHELL = [
   './',
