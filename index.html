@@ -256,6 +256,34 @@
   .top-nav button:active{ opacity:0.7; }
   .top-nav .prevBtn{ color:#c2436a; }
   .top-nav .nextBtn{ color:var(--ink-soft); }
+  .top-nav .shareBtn{
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:4px;
+  }
+  .share-toast{
+    position:fixed;
+    left:50%;
+    bottom:28px;
+    transform:translateX(-50%) translateY(12px);
+    background:var(--accent);
+    color:#fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    padding:10px 18px;
+    border-radius:999px;
+    box-shadow: var(--shadow);
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index:60;
+  }
+  .share-toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
 
   .install-btn{
     display:block;
@@ -390,8 +418,11 @@
 
   <div class="top-nav">
     <button id="prevBtn" class="prevBtn">← Prev</button>
+    <button id="shareBtn" class="shareBtn">📤 Share</button>
     <button id="nextBtn" class="nextBtn">Next →</button>
   </div>
+
+  <div class="share-toast" id="shareToast">Copied to clipboard</div>
 
   <div class="card">
     <div class="ref" id="refLine"></div>
@@ -421,19 +452,25 @@ const UI_TEXT = {
     iosTitle: "Add to Home Screen", iosClose: "Got it",
     iosStep1: "Tap the <strong>Share</strong> icon in Safari's toolbar.",
     iosStep2: "Scroll down and tap <strong>“Add to Home Screen.”</strong>",
-    iosStep3: "Tap <strong>“Add”</strong> in the top right." },
+    iosStep3: "Tap <strong>“Add”</strong> in the top right.",
+    share: "📤 Share", shareCopied: "Copied to clipboard",
+    shareTitle: "Word Study in 60 Seconds" },
   es: { q: "Preguntas para el grupo", prev: "← Anterior", next: "Siguiente →", mark: "Marcar leído", done: "Leído ✓", streak: (n) => `<b>${n}</b> día${n===1?'':'s'} leído${n===1?'':'s'}`,
     installAndroid: "⤓ Instalar App", installIOS: "⤓ Añadir a Inicio",
     iosTitle: "Añadir a la pantalla de inicio", iosClose: "Entendido",
     iosStep1: "Toca el ícono de <strong>Compartir</strong> en la barra de Safari.",
     iosStep2: "Desplázate hacia abajo y toca <strong>“Añadir a la pantalla de inicio.”</strong>",
-    iosStep3: "Toca <strong>“Añadir”</strong> en la parte superior derecha." },
+    iosStep3: "Toca <strong>“Añadir”</strong> en la parte superior derecha.",
+    share: "📤 Compartir", shareCopied: "Copiado al portapapeles",
+    shareTitle: "Estudio de la Palabra en 60 Segundos" },
   pt: { q: "Perguntas para o grupo", prev: "← Anterior", next: "Próximo →", mark: "Marcar como lido", done: "Lido ✓", streak: (n) => `<b>${n}</b> dia${n===1?'':'s'} lido${n===1?'':'s'}`,
     installAndroid: "⤓ Instalar App", installIOS: "⤓ Adicionar à Tela",
     iosTitle: "Adicionar à Tela de Início", iosClose: "Entendi",
     iosStep1: "Toque no ícone de <strong>Compartilhar</strong> na barra do Safari.",
     iosStep2: "Role para baixo e toque em <strong>“Adicionar à Tela de Início.”</strong>",
-    iosStep3: "Toque em <strong>“Adicionar”</strong> no canto superior direito." }
+    iosStep3: "Toque em <strong>“Adicionar”</strong> no canto superior direito.",
+    share: "📤 Compartilhar", shareCopied: "Copiado para a área de transferência",
+    shareTitle: "Estudo da Palavra em 60 Segundos" }
 };
 
 const DEVOTIONALS = [
