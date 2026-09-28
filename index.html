@@ -285,6 +285,46 @@
     transform:translateX(-50%) translateY(0);
   }
 
+  .share-sheet-text{
+    width:100%;
+    min-height:180px;
+    max-height:40vh;
+    resize:none;
+    box-sizing:border-box;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px;
+    margin-bottom:14px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size:13.5px;
+    line-height:1.5;
+    color:var(--ink);
+    background:var(--bg);
+  }
+  .share-sheet-row{
+    display:flex;
+    gap:10px;
+  }
+  .share-sheet-row button{
+    flex:1;
+    border:none;
+    padding:12px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .share-sheet-copy{
+    background:var(--accent);
+    color:#fff;
+  }
+  .share-sheet-cancel{
+    background:none;
+    border:1px solid var(--line) !important;
+    color:var(--ink-soft);
+  }
+
   .install-btn{
     display:block;
     margin:0 auto 18px;
@@ -424,6 +464,17 @@
 
   <div class="share-toast" id="shareToast">Copied to clipboard</div>
 
+  <div class="ios-overlay" id="shareOverlay" hidden>
+    <div class="ios-sheet">
+      <h3 id="shareSheetTitle">Share</h3>
+      <textarea class="share-sheet-text" id="shareSheetText" readonly></textarea>
+      <div class="share-sheet-row">
+        <button id="shareSheetCancel" class="share-sheet-cancel">Close</button>
+        <button id="shareSheetCopy" class="share-sheet-copy">Copy</button>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
     <div class="ref" id="refLine"></div>
     <blockquote id="verseLine"></blockquote>
@@ -454,7 +505,9 @@ const UI_TEXT = {
     iosStep2: "Scroll down and tap <strong>“Add to Home Screen.”</strong>",
     iosStep3: "Tap <strong>“Add”</strong> in the top right.",
     share: "📤 Share", shareCopied: "Copied to clipboard",
-    shareTitle: "Word Study in 60 Seconds" },
+    shareTitle: "Word Study in 60 Seconds",
+    shareSheetTitle: "Share this devotional", shareSheetCopy: "Copy",
+    shareSheetClose: "Close" },
   es: { q: "Preguntas para el grupo", prev: "← Anterior", next: "Siguiente →", mark: "Marcar leído", done: "Leído ✓", streak: (n) => `<b>${n}</b> día${n===1?'':'s'} leído${n===1?'':'s'}`,
     installAndroid: "⤓ Instalar App", installIOS: "⤓ Añadir a Inicio",
     iosTitle: "Añadir a la pantalla de inicio", iosClose: "Entendido",
@@ -462,7 +515,9 @@ const UI_TEXT = {
     iosStep2: "Desplázate hacia abajo y toca <strong>“Añadir a la pantalla de inicio.”</strong>",
     iosStep3: "Toca <strong>“Añadir”</strong> en la parte superior derecha.",
     share: "📤 Compartir", shareCopied: "Copiado al portapapeles",
-    shareTitle: "Estudio de la Palabra en 60 Segundos" },
+    shareTitle: "Estudio de la Palabra en 60 Segundos",
+    shareSheetTitle: "Comparte este devocional", shareSheetCopy: "Copiar",
+    shareSheetClose: "Cerrar" },
   pt: { q: "Perguntas para o grupo", prev: "← Anterior", next: "Próximo →", mark: "Marcar como lido", done: "Lido ✓", streak: (n) => `<b>${n}</b> dia${n===1?'':'s'} lido${n===1?'':'s'}`,
     installAndroid: "⤓ Instalar App", installIOS: "⤓ Adicionar à Tela",
     iosTitle: "Adicionar à Tela de Início", iosClose: "Entendi",
@@ -470,7 +525,9 @@ const UI_TEXT = {
     iosStep2: "Role para baixo e toque em <strong>“Adicionar à Tela de Início.”</strong>",
     iosStep3: "Toque em <strong>“Adicionar”</strong> no canto superior direito.",
     share: "📤 Compartilhar", shareCopied: "Copiado para a área de transferência",
-    shareTitle: "Estudo da Palavra em 60 Segundos" }
+    shareTitle: "Estudo da Palavra em 60 Segundos",
+    shareSheetTitle: "Compartilhe este devocional", shareSheetCopy: "Copiar",
+    shareSheetClose: "Fechar" }
 };
 
 const DEVOTIONALS = [
@@ -680,6 +737,7 @@ function render(){
 
   document.getElementById('prevBtn').textContent = ui.prev;
   document.getElementById('nextBtn').textContent = ui.next;
+  document.getElementById('shareBtn').textContent = ui.share;
 
   // install button label + iOS sheet text follow the current language
   if (!installBtn.hidden) {
@@ -735,6 +793,93 @@ document.getElementById('langToggle').addEventListener('click', (e)=>{
   lang = btn.dataset.lang;
   document.querySelectorAll('#langToggle button').forEach(b=>b.classList.toggle('active', b===btn));
   render();
+});
+
+// --- share: builds the full devotional (ref, verse, title, body, questions) as plain text ---
+function stripHTML(html){
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+function buildShareText(){
+  const d = DEVOTIONALS[idx][lang];
+  const ui = UI_TEXT[lang];
+  const lines = [];
+  lines.push(d.title);
+  lines.push(d.ref);
+  lines.push('');
+  lines.push(d.verse);
+  lines.push('');
+  d.body.forEach(p => lines.push(stripHTML(p)));
+  lines.push('');
+  lines.push(ui.q + ':');
+  d.questions.forEach((q,i) => lines.push(`${i+1}. ${q}`));
+  return lines.join('\n');
+}
+function showShareToast(){
+  const toast = document.getElementById('shareToast');
+  const ui = UI_TEXT[lang];
+  toast.textContent = ui.shareCopied;
+  toast.classList.add('show');
+  setTimeout(()=>{ toast.classList.remove('show'); }, 2200);
+}
+
+// last-resort fallback: a text box with everything in it, so sharing never
+// fails silently even when navigator.share AND clipboard are both unavailable
+// (common inside embedded/in-app browser webviews)
+const shareOverlay = document.getElementById('shareOverlay');
+const shareSheetText = document.getElementById('shareSheetText');
+function showShareFallback(text){
+  const ui = UI_TEXT[lang];
+  document.getElementById('shareSheetTitle').textContent = ui.shareSheetTitle;
+  document.getElementById('shareSheetCopy').textContent = ui.shareSheetCopy;
+  document.getElementById('shareSheetCancel').textContent = ui.shareSheetClose;
+  shareSheetText.value = text;
+  shareOverlay.hidden = false;
+  // auto-select so a manual copy (ctrl/cmd+C) works with zero extra taps
+  setTimeout(()=>{ shareSheetText.focus(); shareSheetText.select(); }, 50);
+}
+document.getElementById('shareSheetCancel').addEventListener('click', ()=>{ shareOverlay.hidden = true; });
+shareOverlay.addEventListener('click', (e)=>{ if (e.target === shareOverlay) shareOverlay.hidden = true; });
+document.getElementById('shareSheetCopy').addEventListener('click', async ()=>{
+  shareSheetText.focus();
+  shareSheetText.select();
+  let copied = false;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try { await navigator.clipboard.writeText(shareSheetText.value); copied = true; } catch(e){}
+  }
+  if (!copied) {
+    try { copied = document.execCommand('copy'); } catch(e){}
+  }
+  if (copied) { shareOverlay.hidden = true; showShareToast(); }
+});
+
+document.getElementById('shareBtn').addEventListener('click', async ()=>{
+  const ui = UI_TEXT[lang];
+  const text = buildShareText();
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: ui.shareTitle, text });
+      return; // native share sheet handled it
+    } catch(e) {
+      if (e && e.name === 'AbortError') return; // user cancelled on purpose — done
+      // any other failure (no share targets, blocked, embedded webview, etc.) — fall through
+    }
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      showShareToast();
+      return;
+    } catch(e) {
+      // clipboard blocked (permissions, insecure context, embedded webview) — fall through
+    }
+  }
+
+  // guaranteed-visible last resort — the user can always read/select/copy from here
+  showShareFallback(text);
 });
 
 // --- install support: set this up BEFORE the first render() call, ---
