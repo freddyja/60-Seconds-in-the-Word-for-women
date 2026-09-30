@@ -1,7 +1,7 @@
 {
   "name": "Kingdom Sisters — 60 Seconds in the Word",
   "short_name": "KS 60 Sec",
-  "description": "A one-minute daily devotional for Kingdom Sisters — English, Spanish, and Portuguese.",
+  "description": "A one-minute devotional for Kingdom Sisters — fifteen sister themes and Proverbs 31, in English, Spanish, and Portuguese.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

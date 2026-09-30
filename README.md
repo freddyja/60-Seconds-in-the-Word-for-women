@@ -1,6 +1,6 @@
 # Kingdom Sisters — 60 Seconds in the Word
 
-A one-minute daily devotional app for Kingdom Sisters — English, Spanish, and Portuguese. Same script as the Fire Fellowship app, rebranded: rose/gold color palette, "sister"-facing language, and its own starter set of devotionals (Chosen, Peace, Strength). Installable on phones as a Progressive Web App (PWA): add it to the home screen and it opens full-screen, no browser bar, works offline.
+A one-minute devotional app for Kingdom Sisters — English, Spanish, and Portuguese. Rose/gold color palette and sister-facing language. Fifteen thematic devotionals, plus a second track that walks Proverbs 31 in nine short sections. Installable on phones as a Progressive Web App (PWA): add it to the home screen and it opens full-screen, no browser bar, works offline.
 
 ## Files
 
@@ -34,23 +34,25 @@ That's it — no build step, no server, nothing to compile. This is a completely
 
 ## Updating the devotional content
 
-All devotionals live inside `index.html` in a JavaScript array called `DEVOTIONALS`, near the top of the `<script>` tag. Each entry looks like:
+All devotionals live inside `index.html`, in the `<script>` tag. Thematic studies are the `DEVOTIONALS` array. The Proverbs 31 track is the `PROVERBS31` array. Each entry looks like:
 
 ```js
 {
-  id: "chosen",
+  id: "beloved",
   en: { ref: "...", verse: "...", title: "...", body: [...], questions: [...] },
   es: { ... },
   pt: { ... }
 }
 ```
 
-There are 3 to start (Chosen, Peace, Strength) — the same starting shape as the Fire Fellowship app had before it grew. To add more, copy one whole `{ id: ..., en: {...}, es: {...}, pt: {...} }` block, paste it before the closing `];`, and fill in the new content. No other file needs to change — the day-of-year rotation and the language switcher pick it up automatically. Just ask Claude for more entries in the same conversation any time — it can keep writing them in this exact format and pattern them in for you.
+There are 15 thematic devotionals (Chosen, Peace, and Strength, kept as they were, plus Beloved, Worth, Speech, Friendship, Belonging, Legacy, Forgiveness, Courage, Calling, Hospitality, Waiting, and Prayer). `PROVERBS31` holds nine chapter sections: 31:1-9, 10-12, 13-15, 16-18, 19-22, 23-25, 26-27, 28-29, and 30-31.
+
+The screen has a Themes / Proverbs 31 switch (Temas / Proverbios 31 / Provérbios 31). Previous, next, the dots, and Mark Read stay inside the track that is open. The first visit opens on today's theme (day-of-year). After that, the app remembers the last track and place in `localStorage` (`kingdom_sisters_place`). To add another theme or section, copy one whole block into the matching array. The language switcher picks it up automatically.
 
 **Important:** every time you push a content or code change, bump the version number at the top of `service-worker.js`:
 
 ```js
-const CACHE_NAME = 'kingdom-sisters-60-seconds-v2';  // was v1
+const CACHE_NAME = 'kingdom-sisters-60-seconds-v7';  // bump on every content or code change
 ```
 
 Without that bump, phones that already installed the app will keep showing the old cached version instead of picking up your edit.

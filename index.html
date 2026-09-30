@@ -8,7 +8,7 @@
 <!-- PWA / app-shell setup -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7a3350">
-<meta name="description" content="A one-minute daily devotional for Kingdom Sisters — English, Spanish, and Portuguese.">
+<meta name="description" content="A one-minute devotional for Kingdom Sisters — fifteen sister themes and Proverbs 31, in English, Spanish, and Portuguese.">
 
 <!-- iOS home-screen support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -424,8 +424,37 @@
     cursor:pointer;
   }
 
+
+  .track-toggle{
+    display:flex;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:3px;
+    box-shadow: var(--shadow);
+    margin: -6px 0 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .track-toggle button{
+    flex:1;
+    border:none;
+    background:transparent;
+    color:var(--ink-soft);
+    padding:8px 10px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .track-toggle button.active{
+    background:var(--accent);
+    color:#fff;
+  }
+
   .dots{
     display:flex;
+    flex-wrap:wrap;
     justify-content:center;
     gap:8px;
     margin:18px 0 6px;
@@ -462,6 +491,11 @@
       <button data-lang="pt">PT</button>
     </div>
     <div class="streak" id="streakLabel"></div>
+  </div>
+
+  <div class="track-toggle" id="trackToggle">
+    <button type="button" data-track="themes" class="active">Themes</button>
+    <button type="button" data-track="proverbs">Proverbs 31</button>
   </div>
 
   <button id="installBtn" class="install-btn" hidden>⤓ Install App</button>
@@ -513,7 +547,7 @@
     <button id="markBtn" class="mark-read">Mark Read</button>
   </div>
 
-  <footer>Chosen · Peace · Strength — Kingdom Sisters devotional series</footer>
+  <footer id="footerLine">15 themes: Chosen, Peace, Strength, Beloved, Worth, Speech, Friendship, Belonging, Legacy, Forgiveness, Courage, Calling, Hospitality, Waiting, and Prayer — plus Proverbs 31.</footer>
 </div>
 
 <script>
@@ -529,7 +563,10 @@ const UI_TEXT = {
     shareSheetTitle: "Share this devotional", shareSheetCopy: "Copy",
     shareSheetClose: "Close",
     shareAppLabel: "Share this app", shareAppSheetTitle: "Share this app",
-    shareAppBlurb: "A one-minute daily devotional for women — in English, Spanish, and Portuguese." },
+    shareAppBlurb: "A one-minute devotional for women — fifteen themes and Proverbs 31, in English, Spanish, and Portuguese.",
+    trackThemes: "Themes",
+    trackProv: "Proverbs 31",
+    footer: "15 themes: Chosen, Peace, Strength, Beloved, Worth, Speech, Friendship, Belonging, Legacy, Forgiveness, Courage, Calling, Hospitality, Waiting, and Prayer — plus Proverbs 31." },
   es: { q: "Preguntas para el grupo", prev: "← Anterior", next: "Siguiente →", mark: "Marcar leído", done: "Leído ✓", streak: (n) => `<b>${n}</b> día${n===1?'':'s'} leído${n===1?'':'s'}`,
     installAndroid: "⤓ Instalar App", installIOS: "⤓ Añadir a Inicio",
     iosTitle: "Añadir a la pantalla de inicio", iosClose: "Entendido",
@@ -541,7 +578,10 @@ const UI_TEXT = {
     shareSheetTitle: "Comparte este devocional", shareSheetCopy: "Copiar",
     shareSheetClose: "Cerrar",
     shareAppLabel: "Comparte esta app", shareAppSheetTitle: "Comparte esta app",
-    shareAppBlurb: "Un devocional diario de un minuto para mujeres — en inglés, español y portugués." },
+    shareAppBlurb: "Un devocional de un minuto para mujeres — quince temas y Proverbios 31, en inglés, español y portugués.",
+    trackThemes: "Temas",
+    trackProv: "Proverbios 31",
+    footer: "15 temas: Escogida, Paz, Fortaleza, Amada, Valor, Palabras, Amistad, Familia, Legado, Perdón, Ánimo, Llamado, Hogar, Espera y Oración — y Proverbios 31." },
   pt: { q: "Perguntas para o grupo", prev: "← Anterior", next: "Próximo →", mark: "Marcar como lido", done: "Lido ✓", streak: (n) => `<b>${n}</b> dia${n===1?'':'s'} lido${n===1?'':'s'}`,
     installAndroid: "⤓ Instalar App", installIOS: "⤓ Adicionar à Tela",
     iosTitle: "Adicionar à Tela de Início", iosClose: "Entendi",
@@ -553,7 +593,10 @@ const UI_TEXT = {
     shareSheetTitle: "Compartilhe este devocional", shareSheetCopy: "Copiar",
     shareSheetClose: "Fechar",
     shareAppLabel: "Compartilhe este app", shareAppSheetTitle: "Compartilhe este app",
-    shareAppBlurb: "Um devocional diário de um minuto para mulheres — em inglês, espanhol e português." }
+    shareAppBlurb: "Um devocional de um minuto para mulheres — quinze temas e Provérbios 31, em inglês, espanhol e português.",
+    trackThemes: "Temas",
+    trackProv: "Provérbios 31",
+    footer: "15 temas: Escolhida, Paz, Força, Amada, Valor, Palavras, Amizade, Família, Legado, Perdão, Coragem, Chamado, Lar, Espera e Oração — e Provérbios 31." }
 };
 
 const DEVOTIONALS = [
@@ -727,12 +770,1243 @@ const DEVOTIONALS = [
       "Em qual lugar esta semana você poderia deixar a honra, não a ansiedade, ser sua primeira resposta?"
     ]
   }
+},
+{
+  id: "beloved",
+  en: {
+    ref: "1 John 3:1",
+    verse: "“See what kind of love the Father has given us, that we should be called children of God — and so we are.”",
+    title: "Called His Own",
+    body: [
+      "Some days the loudest voice in a woman’s life is the one that says she is tolerated, not treasured.",
+      "John stops that voice and says look — really look — at the love the Father has given. Not leased. Not earned by a quieter week. Given.",
+      "The name He puts on you is not “project” or “almost.” It is child of God. And John adds the sentence that ends the argument: so we are.",
+      "You do not become His daughter by performing your way into the family. The love came first. The name followed the love.",
+      "<strong>Sisters, stop living like a guest in a house where you are already a daughter.</strong>",
+      "Walk into today as a woman who is already called His own."
+    ],
+    questions: [
+      "Where have you been living like a guest in God’s family instead of a daughter?",
+      "What voice have you been agreeing with that contradicts the name He has already given you?",
+      "What would change this week if “I am His” were the first sentence of your day?"
+    ]
+  },
+  es: {
+    ref: "1 Juan 3:1",
+    verse: "“Miren qué amor nos ha dado el Padre: que seamos llamadas hijas de Dios. Y así es: lo somos.”",
+    title: "Llamada Suya",
+    body: [
+      "Algunos días la voz más fuerte en la vida de una mujer es la que dice que es tolerada, no atesorada.",
+      "Juan detiene esa voz y dice mira — mira de verdad — el amor que el Padre ha dado. No alquilado. No ganado con una semana más quieta. Dado.",
+      "El nombre que Él pone sobre ti no es “proyecto” ni “casi.” Es hija de Dios. Y Juan añade la frase que cierra la discusión: y lo somos.",
+      "No te vuelves hija suya actuando hasta entrar en la familia. El amor llegó primero. El nombre vino después del amor.",
+      "<strong>Hermanas, dejen de vivir como invitadas en una casa donde ya son hijas.</strong>",
+      "Entren en este día como mujeres que ya son llamadas suyas."
+    ],
+    questions: [
+      "¿Dónde has estado viviendo como invitada en la familia de Dios en lugar de como hija?",
+      "¿Con qué voz has estado de acuerdo que contradice el nombre que Él ya te dio?",
+      "¿Qué cambiaría esta semana si “soy suya” fuera la primera frase de tu día?"
+    ]
+  },
+  pt: {
+    ref: "1 João 3:1",
+    verse: "“Vejam que amor o Pai nos deu: sermos chamadas filhas de Deus. E somos.”",
+    title: "Chamada de Sua",
+    body: [
+      "Em alguns dias, a voz mais alta na vida de uma mulher é a que diz que ela é tolerada, não amada de verdade.",
+      "João interrompe essa voz e diz: olhe — olhe de verdade — para o amor que o Pai deu. Não alugado. Não conquistado com uma semana mais quieta. Dado.",
+      "O nome que Ele coloca sobre você não é “projeto” nem “quase.” É filha de Deus. E João acrescenta a frase que encerra a discussão: e somos.",
+      "Você não se torna filha dele representando um papel até entrar na família. O amor veio primeiro. O nome veio depois do amor.",
+      "<strong>Irmãs, parem de viver como visitas numa casa onde vocês já são filhas.</strong>",
+      "Entrem neste dia como mulheres que já são chamadas de suas."
+    ],
+    questions: [
+      "Onde você tem vivido como visita na família de Deus em vez de como filha?",
+      "Com qual voz você tem concordado que contradiz o nome que Ele já te deu?",
+      "O que mudaria nesta semana se “eu sou dele” fosse a primeira frase do seu dia?"
+    ]
+  }
+},
+{
+  id: "worth",
+  en: {
+    ref: "1 Peter 3:3-4",
+    verse: "“Do not let your beauty rest on outward braiding, gold, and clothes, but on the hidden person of the heart — the unfading beauty of a gentle and quiet spirit, which is precious in God’s sight.”",
+    title: "The Beauty That Stays",
+    body: [
+      "The mirror is a loud teacher. It grades a woman every morning and rarely gives mercy.",
+      "Peter does not shame the care you take with your hair or your clothes. He moves the prize. The beauty that lasts is hidden — the person of the heart.",
+      "A gentle and quiet spirit is not a woman with no voice. It is a woman whose soul is not frantic, because she already knows she is precious to God.",
+      "Outward things fade, change, and get compared. The heart He calls precious does not expire when the lighting changes.",
+      "<strong>Sisters, you are not a before-and-after photo. You are a heart He already calls precious.</strong>",
+      "Let the hidden place be where you spend your attention this week."
+    ],
+    questions: [
+      "Where are you still letting a mirror, a comment, or a comparison decide your worth?",
+      "What would a gentle spirit look like for you — not silence, but a soul that is not frantic?",
+      "What is one hidden place of the heart you can tend this week instead of only polishing the outside?"
+    ]
+  },
+  es: {
+    ref: "1 Pedro 3:3-4",
+    verse: "“Que su belleza no descanse en peinados, oro y vestidos, sino en la persona escondida del corazón: la belleza imperecedera de un espíritu afable y apacible, que es precioso delante de Dios.”",
+    title: "La Belleza Que Permanece",
+    body: [
+      "El espejo es un maestro ruidoso. Califica a una mujer cada mañana y casi nunca tiene misericordia.",
+      "Pedro no avergüenza el cuidado que pones en tu cabello o tu ropa. Cambia el premio de lugar. La belleza que permanece está escondida: la persona del corazón.",
+      "Un espíritu afable y apacible no es una mujer sin voz. Es una mujer cuya alma no está frenética, porque ya sabe que es preciosa para Dios.",
+      "Lo de afuera se desvanece, cambia y se compara. El corazón que Él llama precioso no caduca cuando cambia la luz.",
+      "<strong>Hermanas, no son una foto de antes y después. Son un corazón que Él ya llama precioso.</strong>",
+      "Que el lugar escondido sea donde pongan su atención esta semana."
+    ],
+    questions: [
+      "¿Dónde todavía dejas que un espejo, un comentario o una comparación decida tu valor?",
+      "¿Cómo se vería en ti un espíritu afable — no el silencio, sino un alma que no está frenética?",
+      "¿Qué lugar escondido del corazón puedes cuidar esta semana en lugar de solo pulir lo de afuera?"
+    ]
+  },
+  pt: {
+    ref: "1 Pedro 3:3-4",
+    verse: "“Que a beleza de vocês não esteja em penteados, ouro e roupas, mas na pessoa escondida do coração: a beleza que não se apaga, de um espírito manso e tranquilo, precioso diante de Deus.”",
+    title: "A Beleza Que Permanece",
+    body: [
+      "O espelho é um professor barulhento. Ele dá nota a uma mulher toda manhã e quase nunca tem misericórdia.",
+      "Pedro não envergonha o cuidado que você tem com o cabelo ou a roupa. Ele muda o lugar do prêmio. A beleza que permanece está escondida: a pessoa do coração.",
+      "Um espírito manso e tranquilo não é uma mulher sem voz. É uma mulher cuja alma não está frenética, porque ela já sabe que é preciosa para Deus.",
+      "O que é de fora desvanece, muda e entra em comparação. O coração que Ele chama de precioso não perde o valor quando a luz muda.",
+      "<strong>Irmãs, vocês não são uma foto de antes e depois. São um coração que Ele já chama de precioso.</strong>",
+      "Que o lugar escondido seja onde vocês colocam a atenção nesta semana."
+    ],
+    questions: [
+      "Onde você ainda deixa um espelho, um comentário ou uma comparação decidir o seu valor?",
+      "Como seria em você um espírito manso — não o silêncio, mas uma alma que não está frenética?",
+      "Qual lugar escondido do coração você pode cuidar nesta semana em vez de só polir o lado de fora?"
+    ]
+  }
+},
+{
+  id: "speech",
+  en: {
+    ref: "Proverbs 15:1",
+    verse: "“A soft answer turns away anger, but a harsh word stirs it up.”",
+    title: "The Word You Send",
+    body: [
+      "A woman’s words travel farther than she thinks — into a child’s memory, a friend’s evening, a thread that never quite forgets.",
+      "A soft answer is not a weak answer. It is a true word aimed at peace instead of at winning.",
+      "A harsh word feels powerful for a moment. It also stirs up the very thing you hoped would settle.",
+      "Wisdom here is not having the sharpest reply ready. It is knowing that kindness can be the stronger sentence.",
+      "<strong>Sisters, you do not have to win the moment to tell the truth.</strong>",
+      "Before you send the word today, ask whether it turns anger away or feeds it."
+    ],
+    questions: [
+      "Where has a harsh word — yours or someone else’s — kept stirring a room that needed peace?",
+      "What would a soft answer sound like in the conversation you are avoiding?",
+      "Is there a message you should wait on, rewrite, or not send at all?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 15:1",
+    verse: "“La respuesta amable aparta el enojo, pero la palabra áspera lo enciende.”",
+    title: "La Palabra Que Envías",
+    body: [
+      "Las palabras de una mujer viajan más lejos de lo que ella cree: a la memoria de un hijo, a la noche de una amiga, a un mensaje que no se olvida del todo.",
+      "Una respuesta amable no es una respuesta débil. Es una palabra verdadera apuntada a la paz, no a ganar.",
+      "La palabra áspera se siente poderosa un momento. También enciende justo lo que esperabas que se calmara.",
+      "La sabiduría aquí no es tener la réplica más filosa. Es saber que la bondad puede ser la frase más fuerte.",
+      "<strong>Hermanas, no necesitan ganar el momento para decir la verdad.</strong>",
+      "Antes de enviar la palabra hoy, pregunten si aparta el enojo o lo alimenta."
+    ],
+    questions: [
+      "¿Dónde una palabra áspera — tuya o de otra — ha seguido encendiendo un lugar que necesitaba paz?",
+      "¿Cómo sonaría una respuesta amable en la conversación que estás evitando?",
+      "¿Hay un mensaje que deberías esperar, reescribir o no enviar?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 15:1",
+    verse: "“A resposta branda desvia o furor, mas a palavra dura aumenta a ira.”",
+    title: "A Palavra Que Você Envia",
+    body: [
+      "As palavras de uma mulher viajam mais longe do que ela imagina: na memória de um filho, na noite de uma amiga, numa mensagem que não se esquece de todo.",
+      "Uma resposta branda não é uma resposta fraca. É uma palavra verdadeira apontada para a paz, não para vencer.",
+      "A palavra dura parece poderosa por um momento. Ela também acende justamente o que você esperava que se acalmasse.",
+      "Sabedoria aqui não é ter a réplica mais afiada. É saber que a bondade pode ser a frase mais forte.",
+      "<strong>Irmãs, vocês não precisam ganhar o momento para dizer a verdade.</strong>",
+      "Antes de enviar a palavra hoje, perguntem se ela desvia a ira ou a alimenta."
+    ],
+    questions: [
+      "Onde uma palavra dura — sua ou de outra pessoa — tem continuado a acender um lugar que precisava de paz?",
+      "Como soaria uma resposta branda na conversa que você está evitando?",
+      "Há uma mensagem que você deveria esperar, reescrever ou simplesmente não enviar?"
+    ]
+  }
+},
+{
+  id: "friendship",
+  en: {
+    ref: "Ruth 1:16",
+    verse: "“Where you go I will go, and where you stay I will stay. Your people will be my people, and your God my God.”",
+    title: "A Sister Who Stays",
+    body: [
+      "Ruth does not make a speech about convenience. She makes a promise about presence.",
+      "Naomi had little left to offer — no husband, no sons, no obvious future. Ruth stayed anyway. Kingdom friendship looks like that: not extracting, accompanying.",
+      "“Your God will be my God” is the deepest line. The bond is not only affection. It is two women walking toward the same Lord.",
+      "Many sisters know how to show up for the bright day. Fewer know how to stay for the ordinary road home.",
+      "<strong>Sisters, loyalty is a quiet miracle. It does not trend. It changes a life.</strong>",
+      "Ask the Lord who needs you to stay — not to fix her first, just to stay."
+    ],
+    questions: [
+      "Who has stayed with you when you had little to give back?",
+      "Where have you been present for the easy chapter and absent for the long one?",
+      "Who is one sister you can walk beside this week without needing her to be fine first?"
+    ]
+  },
+  es: {
+    ref: "Rut 1:16",
+    verse: "“Donde tú vayas, yo iré, y donde vivas, viviré. Tu pueblo será mi pueblo, y tu Dios mi Dios.”",
+    title: "Una Hermana Que Se Queda",
+    body: [
+      "Rut no da un discurso sobre lo conveniente. Hace una promesa de presencia.",
+      "Noemí tenía poco que ofrecer: ni esposo, ni hijos, ni un futuro claro. Rut se quedó de todos modos. La amistad del reino se parece a eso: no extraer, acompañar.",
+      "“Tu Dios será mi Dios” es la línea más profunda. El vínculo no es solo cariño. Son dos mujeres caminando hacia el mismo Señor.",
+      "Muchas hermanas saben aparecer en el día brillante. Menos saben quedarse en el camino ordinario de regreso a casa.",
+      "<strong>Hermanas, la lealtad es un milagro silencioso. No es tendencia. Cambia una vida.</strong>",
+      "Pregúntenle al Señor quién necesita que se queden — no que la arreglen primero, solo que se queden."
+    ],
+    questions: [
+      "¿Quién se ha quedado contigo cuando tenías poco que devolver?",
+      "¿Dónde has estado presente en el capítulo fácil y ausente en el largo?",
+      "¿Quién es una hermana a la que puedes acompañar esta semana sin exigir que primero esté bien?"
+    ]
+  },
+  pt: {
+    ref: "Rute 1:16",
+    verse: "“Aonde quer que você for, eu irei, e onde você ficar, eu ficarei. O seu povo será o meu povo, e o seu Deus, o meu Deus.”",
+    title: "Uma Irmã Que Fica",
+    body: [
+      "Rute não faz um discurso sobre conveniência. Ela faz uma promessa de presença.",
+      "Noemi tinha pouco a oferecer: nem marido, nem filhos, nem um futuro óbvio. Rute ficou mesmo assim. A amizade do reino se parece com isso: não extrair, acompanhar.",
+      "“O seu Deus será o meu Deus” é a linha mais profunda. O vínculo não é só afeto. São duas mulheres caminhando para o mesmo Senhor.",
+      "Muitas irmãs sabem aparecer no dia brilhante. Menos sabem ficar na estrada comum de volta para casa.",
+      "<strong>Irmãs, a lealdade é um milagre quieto. Ela não viraliza. Ela muda uma vida.</strong>",
+      "Perguntem ao Senhor quem precisa que vocês fiquem — não que a consertem primeiro, apenas que fiquem."
+    ],
+    questions: [
+      "Quem ficou com você quando você tinha pouco a retribuir?",
+      "Onde você esteve presente no capítulo fácil e ausente no longo?",
+      "Quem é uma irmã com quem você pode caminhar nesta semana sem exigir que ela esteja bem primeiro?"
+    ]
+  }
+},
+{
+  id: "belonging",
+  en: {
+    ref: "Psalm 68:6",
+    verse: "“God sets the lonely in a family. He leads out the prisoners with singing.”",
+    title: "Placed, Not Leftover",
+    body: [
+      "Some women are married and still lonely. Some are single and told they are waiting to become a whole person. Scripture refuses both lies.",
+      "The psalm does not say God only places the married. It says He sets the lonely in a family — His doing, His timing, His kind of household.",
+      "A covenant marriage is a gift. So is a church that becomes kin. So is a friendship that functions like shelter. None of these is a consolation prize for the others.",
+      "You are not leftover until a relationship completes you. You are a woman God knows how to place.",
+      "<strong>Sisters, wholeness is not postponed until your status changes.</strong>",
+      "Receive the family He is already giving — and if you have a home, be the open chair, not the closed circle."
+    ],
+    questions: [
+      "Have you treated singleness, or a hard marriage, as proof that you are unfinished?",
+      "Where has God already set you among people, even if it does not match the picture you wanted?",
+      "Who near you is lonely, and how could you be part of the family God is building around her?"
+    ]
+  },
+  es: {
+    ref: "Salmo 68:6",
+    verse: "“Dios pone al solitario en familia. Saca a los presos a un lugar de cántico.”",
+    title: "Puesta, No de Sobra",
+    body: [
+      "Hay mujeres casadas y aun así solas. Hay mujeres solteras a quienes se les dice que esperan volverse una persona completa. La Escritura rechaza las dos mentiras.",
+      "El salmo no dice que Dios solo coloca a las casadas. Dice que pone al solitario en familia: obra suya, tiempo suyo, hogar a su manera.",
+      "Un matrimonio de pacto es un regalo. También lo es una iglesia que se vuelve parentela. También una amistad que funciona como refugio. Ninguno es premio de consuelo por los otros.",
+      "No eres lo que sobró hasta que una relación te complete. Eres una mujer a quien Dios sabe colocar.",
+      "<strong>Hermanas, la plenitud no se pospone hasta que cambie su estado civil.</strong>",
+      "Reciban la familia que Él ya está dando — y si tienen un hogar, sean la silla abierta, no el círculo cerrado."
+    ],
+    questions: [
+      "¿Has tratado la soltería, o un matrimonio difícil, como prueba de que estás incompleta?",
+      "¿Dónde Dios ya te ha puesto entre personas, aunque no sea la foto que querías?",
+      "¿Quién cerca de ti está sola, y cómo podrías ser parte de la familia que Dios está formando a su alrededor?"
+    ]
+  },
+  pt: {
+    ref: "Salmo 68:6",
+    verse: "“Deus põe o solitário em família. Faz sair os presos para um lugar de cântico.”",
+    title: "Colocada, Não de Sobra",
+    body: [
+      "Há mulheres casadas e ainda assim solitárias. Há mulheres solteiras a quem dizem que estão esperando para se tornarem uma pessoa inteira. A Escritura recusa as duas mentiras.",
+      "O salmo não diz que Deus só coloca as casadas. Diz que põe o solitário em família — obra dele, tempo dele, casa do jeito dele.",
+      "Um casamento de aliança é um presente. Uma igreja que vira parentesco também é. Uma amizade que funciona como abrigo também. Nenhum desses é prêmio de consolação pelos outros.",
+      "Você não é o que sobrou até um relacionamento te completar. Você é uma mulher que Deus sabe colocar.",
+      "<strong>Irmãs, a inteireza não fica adiada até o seu estado mudar.</strong>",
+      "Recebam a família que Ele já está dando — e, se vocês têm um lar, sejam a cadeira aberta, não o círculo fechado."
+    ],
+    questions: [
+      "Você tem tratado a solteirice, ou um casamento difícil, como prova de que está incompleta?",
+      "Onde Deus já te colocou entre pessoas, mesmo que não seja a foto que você queria?",
+      "Quem perto de você está só, e como você poderia fazer parte da família que Deus está formando ao redor dela?"
+    ]
+  }
+},
+{
+  id: "legacy",
+  en: {
+    ref: "2 Timothy 1:5",
+    verse: "“I am reminded of your sincere faith, a faith that dwelt first in your grandmother Lois and your mother Eunice and now, I am sure, dwells in you.”",
+    title: "Faith That Outlives You",
+    body: [
+      "Paul does not start Timothy’s story with Timothy. He starts with two women whose faith had a forwarding address.",
+      "Lois and Eunice did not need a pulpit to hand something on. Sincere faith lived in them — not performed faith, lived faith — and it found the next generation.",
+      "Motherhood here is wider than biology. Some of you are raising children. Some of you are spiritual mothers, aunts, mentors: the woman a younger sister watches when no lesson has been announced.",
+      "Legacy is not a perfect household. It is a sincere faith someone else can recognize later.",
+      "<strong>Sisters, what lives in you is already teaching, even on the days you feel unseen.</strong>",
+      "Tend the faith you hope will outlive your name."
+    ],
+    questions: [
+      "Whose sincere faith is still living in you — a mother, a grandmother, or a woman who mothered you in Christ?",
+      "What are you actually passing on: anxiety, image, or a lived trust in God?",
+      "Who is watching your ordinary faith, and what do you want her to find living in you?"
+    ]
+  },
+  es: {
+    ref: "2 Timoteo 1:5",
+    verse: "“Traigo a la memoria tu fe sincera, la cual habitó primero en tu abuela Loida y en tu madre Eunice, y estoy seguro de que habita en ti.”",
+    title: "Una Fe Que Te Sobrevive",
+    body: [
+      "Pablo no empieza la historia de Timoteo con Timoteo. La empieza con dos mujeres cuya fe tenía a quién llegar después.",
+      "Loida y Eunice no necesitaron un púlpito para entregar algo. Una fe sincera vivía en ellas — no una fe actuada, una fe vivida — y encontró a la siguiente generación.",
+      "La maternidad aquí es más ancha que la biología. Algunas están criando hijos. Otras son madres espirituales, tías, mentoras: la mujer a quien una hermana más joven observa cuando nadie anunció una lección.",
+      "El legado no es un hogar perfecto. Es una fe sincera que alguien más puede reconocer después.",
+      "<strong>Hermanas, lo que vive en ustedes ya está enseñando, incluso en los días en que se sienten invisibles.</strong>",
+      "Cuiden la fe que esperan que sobreviva a su nombre."
+    ],
+    questions: [
+      "¿La fe sincera de quién sigue viviendo en ti: una madre, una abuela, o una mujer que te madreó en Cristo?",
+      "¿Qué estás pasando de verdad: ansiedad, imagen, o una confianza vivida en Dios?",
+      "¿Quién está mirando tu fe ordinaria, y qué quieres que encuentre viviendo en ti?"
+    ]
+  },
+  pt: {
+    ref: "2 Timóteo 1:5",
+    verse: "“Trago à memória a fé sincera que há em você, a qual habitou primeiro na sua avó Lóide e na sua mãe Eunice, e estou certo de que habita em você.”",
+    title: "Uma Fé Que Continua",
+    body: [
+      "Paulo não começa a história de Timóteo com Timóteo. Ele começa com duas mulheres cuja fé tinha para onde seguir.",
+      "Loide e Eunice não precisaram de um púlpito para entregar alguma coisa. Uma fé sincera vivia nelas — não uma fé representada, uma fé vivida — e encontrou a geração seguinte.",
+      "Maternidade aqui é mais larga que a biologia. Algumas estão criando filhos. Outras são mães espirituais, tias, mentoras: a mulher que uma irmã mais nova observa quando ninguém anunciou uma lição.",
+      "Legado não é uma casa perfeita. É uma fé sincera que outra pessoa consegue reconhecer depois.",
+      "<strong>Irmãs, o que vive em vocês já está ensinando, mesmo nos dias em que se sentem invisíveis.</strong>",
+      "Cuidem da fé que vocês esperam que continue depois do nome de vocês."
+    ],
+    questions: [
+      "A fé sincera de quem ainda vive em você — uma mãe, uma avó, ou uma mulher que te maternizou em Cristo?",
+      "O que você está de fato passando adiante: ansiedade, imagem, ou uma confiança vivida em Deus?",
+      "Quem está olhando a sua fé comum, e o que você quer que ela encontre vivendo em você?"
+    ]
+  }
+},
+{
+  id: "forgiveness",
+  en: {
+    ref: "Colossians 3:13",
+    verse: "“Bear with one another and, if one has a complaint against another, forgive each other; as the Lord has forgiven you, so you also must forgive.”",
+    title: "Free to Forgive",
+    body: [
+      "Forgiveness sounds beautiful until it has a name and a memory attached.",
+      "Paul does not say pretend it did not hurt. He says bear with one another — stay in the real relationship — and forgive the way the Lord forgave you.",
+      "The measure is not whether she deserves it. You did not deserve the mercy you live in either. The cross is the standard, not the quality of her apology.",
+      "Unforgiveness feels like protection. Often it is a room you keep locking from the inside.",
+      "<strong>Sisters, you can tell the truth about the wound and still put the debt down.</strong>",
+      "Ask the Lord whose name you are still carrying, and let His forgiveness be the reason yours can begin."
+    ],
+    questions: [
+      "Who are you still making pay for something Christ has already covered in you?",
+      "What is the difference, for you, between forgiveness and pretending you were not hurt?",
+      "What is one way to bear with someone this week instead of keeping score?"
+    ]
+  },
+  es: {
+    ref: "Colosenses 3:13",
+    verse: "“Sopórtense unos a otros, y si alguno tiene queja contra otro, perdónense; como el Señor los perdonó, así también háganlo ustedes.”",
+    title: "Libres para Perdonar",
+    body: [
+      "El perdón suena hermoso hasta que tiene un nombre y un recuerdo pegados.",
+      "Pablo no dice que finjas que no dolió. Dice que se soporten — que se queden en la relación real — y que perdonen como el Señor las perdonó.",
+      "La medida no es si ella lo merece. Tú tampoco mereciste la misericordia en la que vives. La cruz es el estándar, no la calidad de su disculpa.",
+      "No perdonar se siente como protección. Muchas veces es un cuarto que sigues cerrando por dentro.",
+      "<strong>Hermanas, pueden decir la verdad de la herida y aun así soltar la deuda.</strong>",
+      "Pregúntenle al Señor qué nombre siguen cargando, y dejen que el perdón de Él sea la razón por la que el de ustedes puede empezar."
+    ],
+    questions: [
+      "¿A quién sigues haciendo pagar por algo que Cristo ya cubrió en ti?",
+      "¿Cuál es, para ti, la diferencia entre perdonar y fingir que no te dolió?",
+      "¿De qué manera puedes soportar a alguien esta semana en lugar de llevar la cuenta?"
+    ]
+  },
+  pt: {
+    ref: "Colossenses 3:13",
+    verse: "“Suportem uns aos outros e, se alguém tiver queixa contra outro, perdoem-se; como o Senhor os perdoou, assim também façam vocês.”",
+    title: "Livres para Perdoar",
+    body: [
+      "O perdão soa bonito até ter um nome e uma lembrança grudados nele.",
+      "Paulo não diz para fingir que não doeu. Ele diz para se suportarem — ficarem na relação real — e perdoarem como o Senhor perdoou vocês.",
+      "A medida não é se ela merece. Você também não mereceu a misericórdia em que vive. A cruz é o padrão, não a qualidade do pedido de desculpas.",
+      "Não perdoar parece proteção. Muitas vezes é um quarto que você continua trancando por dentro.",
+      "<strong>Irmãs, vocês podem dizer a verdade da ferida e ainda assim deixar a dívida.</strong>",
+      "Perguntem ao Senhor qual nome vocês ainda carregam, e deixem o perdão dele ser a razão pela qual o de vocês pode começar."
+    ],
+    questions: [
+      "Quem você ainda está fazendo pagar por algo que Cristo já cobriu em você?",
+      "Qual é, para você, a diferença entre perdoar e fingir que não doeu?",
+      "De que forma você pode suportar alguém nesta semana em vez de ficar na contagem?"
+    ]
+  }
+},
+{
+  id: "courage",
+  en: {
+    ref: "Isaiah 41:10",
+    verse: "“Fear not, for I am with you; be not dismayed, for I am your God. I will strengthen you, I will help you, I will uphold you with my righteous right hand.”",
+    title: "Held, So You Can Go",
+    body: [
+      "Fear rarely introduces itself as fear. It shows up as overthinking, as a smile that stays home, as a yes you never say.",
+      "Isaiah does not shame the woman who is afraid. He gives her a reason that is not her personality: I am with you. I am your God.",
+      "The promise is not that the hard thing shrinks. It is that she will not face it with empty hands. Strengthen. Help. Hold.",
+      "Courage, for a sister, is often ordinary: the conversation, the appointment, the boundary, the dream she stopped naming.",
+      "<strong>Sisters, you do not have to feel brave to be held.</strong>",
+      "Take the next honest step with His hand already on you — not after the fear leaves, but while He holds you in it."
+    ],
+    questions: [
+      "What fear have you been renaming “being realistic”?",
+      "Where do you need His help more than another plan?",
+      "What is one step you can take this week because He is with you, not because you feel ready?"
+    ]
+  },
+  es: {
+    ref: "Isaías 41:10",
+    verse: "“No temas, porque yo estoy contigo; no te desalientes, porque yo soy tu Dios. Te esforzaré, te ayudaré, te sostendré con mi diestra justa.”",
+    title: "Sostenida para Avanzar",
+    body: [
+      "El miedo casi nunca se presenta como miedo. Llega como pensar de más, como una sonrisa que se queda en casa, como un sí que nunca dices.",
+      "Isaías no avergüenza a la mujer que tiene miedo. Le da una razón que no es su personalidad: yo estoy contigo. Yo soy tu Dios.",
+      "La promesa no es que lo difícil se haga pequeño. Es que ella no lo enfrentará con las manos vacías. Esfuerzo. Ayuda. Sostén.",
+      "El valor, para una hermana, suele ser ordinario: la conversación, la cita, el límite, el sueño que dejó de nombrar.",
+      "<strong>Hermanas, no necesitan sentirse valientes para estar sostenidas.</strong>",
+      "Den el siguiente paso honesto con la mano de Él ya sobre ustedes — no después de que el miedo se vaya, sino mientras Él las sostiene en él."
+    ],
+    questions: [
+      "¿Qué miedo has estado renombrando como “ser realista”?",
+      "¿Dónde necesitas su ayuda más que otro plan?",
+      "¿Cuál es un paso que puedes dar esta semana porque Él está contigo, no porque te sientas lista?"
+    ]
+  },
+  pt: {
+    ref: "Isaías 41:10",
+    verse: "“Não temas, porque eu sou contigo; não te assombres, porque eu sou o teu Deus. Eu te fortaleço, e te ajudo, e te sustento com a destra da minha justiça.”",
+    title: "Amparada para Seguir",
+    body: [
+      "O medo quase nunca se apresenta como medo. Ele chega como pensar demais, como um sorriso que fica em casa, como um sim que você nunca diz.",
+      "Isaías não envergonha a mulher que tem medo. Ele dá a ela uma razão que não é a personalidade dela: eu sou contigo. Eu sou o teu Deus.",
+      "A promessa não é que a coisa difícil encolha. É que ela não vai enfrentá-la de mãos vazias. Fortalecer. Ajudar. Sustentar.",
+      "Coragem, para uma irmã, muitas vezes é comum: a conversa, a consulta, o limite, o sonho que ela parou de nomear.",
+      "<strong>Irmãs, vocês não precisam se sentir corajosas para estarem amparadas.</strong>",
+      "Deem o próximo passo honesto com a mão dele já sobre vocês — não depois que o medo for embora, mas enquanto Ele sustenta vocês nele."
+    ],
+    questions: [
+      "Qual medo você tem chamado de “ser realista”?",
+      "Onde você precisa da ajuda dele mais do que de outro plano?",
+      "Qual é um passo que você pode dar nesta semana porque Ele está com você, não porque você se sente pronta?"
+    ]
+  }
+},
+{
+  id: "calling",
+  en: {
+    ref: "Esther 4:14",
+    verse: "“And who knows whether you have not come to the kingdom for such a time as this?”",
+    title: "For Such a Time",
+    body: [
+      "Esther did not volunteer for the moment. The moment arrived wearing her name.",
+      "The question is not pressure to become famous. It is a question of placement. You are where you are — that house, that work, that city, that friendship — on purpose, even when the purpose is not obvious yet.",
+      "Calling is not only a stage. It is the courage to speak when silence would be safer, and the wisdom to pray and wait before you do.",
+      "A soft outcome was not guaranteed. Faithfulness was still the assignment.",
+      "<strong>Sisters, you are not early, late, or accidental in the place God has you.</strong>",
+      "Ask Him what “such a time as this” needs from your voice, your restraint, or your yes."
+    ],
+    questions: [
+      "Where have you assumed your current place is random?",
+      "What are you tempted to stay quiet about because speaking would cost you?",
+      "What would faithful courage look like this week — a word, a prayer, a no, or a yes?"
+    ]
+  },
+  es: {
+    ref: "Ester 4:14",
+    verse: "“¿Y quién sabe si para un tiempo como este has llegado al reino?”",
+    title: "Para un Tiempo Así",
+    body: [
+      "Ester no se ofreció para el momento. El momento llegó con su nombre puesto.",
+      "La pregunta no es presión para volverse famosa. Es una pregunta de lugar. Estás donde estás — esa casa, ese trabajo, esa ciudad, esa amistad — a propósito, aunque el propósito todavía no se vea.",
+      "El llamado no es solo un escenario. Es el valor de hablar cuando el silencio sería más seguro, y la sabiduría de orar y esperar antes de hacerlo.",
+      "Un final suave no estaba garantizado. La fidelidad seguía siendo la tarea.",
+      "<strong>Hermanas, no llegaron temprano, tarde ni por accidente al lugar donde Dios las tiene.</strong>",
+      "Pregúntenle qué necesita de su voz, de su silencio o de su sí “un tiempo como este.”"
+    ],
+    questions: [
+      "¿Dónde has supuesto que tu lugar actual es casual?",
+      "¿Sobre qué tienes la tentación de callar porque hablar te costaría?",
+      "¿Cómo se vería un valor fiel esta semana: una palabra, una oración, un no o un sí?"
+    ]
+  },
+  pt: {
+    ref: "Ester 4:14",
+    verse: "“E quem sabe se não foi para um tempo como este que você chegou ao reino?”",
+    title: "Para um Tempo Assim",
+    body: [
+      "Ester não se ofereceu para o momento. O momento chegou com o nome dela.",
+      "A pergunta não é pressão para ficar famosa. É uma pergunta de lugar. Você está onde está — aquela casa, aquele trabalho, aquela cidade, aquela amizade — de propósito, mesmo quando o propósito ainda não aparece.",
+      "Chamado não é só um palco. É a coragem de falar quando o silêncio seria mais seguro, e a sabedoria de orar e esperar antes de falar.",
+      "Um final suave não estava garantido. A fidelidade ainda era a tarefa.",
+      "<strong>Irmãs, vocês não chegaram cedo, tarde nem por acaso ao lugar onde Deus as colocou.</strong>",
+      "Perguntem a Ele o que “um tempo como este” precisa da voz de vocês, do silêncio de vocês ou do sim de vocês."
+    ],
+    questions: [
+      "Onde você tem tratado o seu lugar atual como acaso?",
+      "Sobre o que você é tentada a ficar calada porque falar custaria?",
+      "Como seria uma coragem fiel nesta semana — uma palavra, uma oração, um não ou um sim?"
+    ]
+  }
+},
+{
+  id: "hospitality",
+  en: {
+    ref: "1 Peter 4:9",
+    verse: "“Show hospitality to one another without grumbling.”",
+    title: "A Door Held Open",
+    body: [
+      "Hospitality is not a styled table. It is a woman willing to be interrupted by love.",
+      "Peter adds the line we skip: without grumbling. A beautiful table with a resentful heart is not the gift. An ordinary evening with a willing spirit is.",
+      "Your welcome may be a kitchen, a rented room, a porch, or a coffee you pay for because your space is small. It can still be real.",
+      "Some sisters were not welcomed well, so an open door feels risky. Start smaller than a performance. Start with presence.",
+      "<strong>Sisters, the kingdom often comes through an ordinary open door.</strong>",
+      "Make room for someone this week without needing the house — or you — to look finished."
+    ],
+    questions: [
+      "Do you postpone welcome until your home or your life looks ready?",
+      "Where has quiet grumbling replaced generosity?",
+      "Who could sit with you this week without an impressive plan?"
+    ]
+  },
+  es: {
+    ref: "1 Pedro 4:9",
+    verse: "“Hospedaos los unos a los otros sin murmuraciones.”",
+    title: "Una Puerta Abierta",
+    body: [
+      "La hospitalidad no es una mesa decorada. Es una mujer dispuesta a ser interrumpida por el amor.",
+      "Pedro añade la línea que saltamos: sin murmurar. Una mesa hermosa con un corazón resentido no es el regalo. Una noche ordinaria con un espíritu dispuesto sí lo es.",
+      "Tu bienvenida puede ser una cocina, un cuarto alquilado, un porche, o un café que pagas porque tu espacio es pequeño. Igual puede ser real.",
+      "A algunas hermanas no las recibieron bien, así que abrir la puerta se siente riesgoso. Empieza más pequeño que un espectáculo. Empieza con presencia.",
+      "<strong>Hermanas, el reino a menudo entra por una puerta ordinaria que está abierta.</strong>",
+      "Hagan lugar para alguien esta semana sin necesitar que la casa — o ustedes — se vea terminada."
+    ],
+    questions: [
+      "¿Pospones la bienvenida hasta que tu casa o tu vida se vea lista?",
+      "¿Dónde la murmuración callada ha reemplazado la generosidad?",
+      "¿Quién podría sentarse contigo esta semana sin un plan impresionante?"
+    ]
+  },
+  pt: {
+    ref: "1 Pedro 4:9",
+    verse: "“Sejam hospitaleiros uns para com os outros, sem murmuração.”",
+    title: "Uma Porta Aberta",
+    body: [
+      "Hospitalidade não é uma mesa produzida. É uma mulher disposta a ser interrompida pelo amor.",
+      "Pedro acrescenta a linha que pulamos: sem murmuração. Uma mesa bonita com um coração ressentido não é o presente. Uma noite comum com um espírito disposto é.",
+      "A sua acolhida pode ser uma cozinha, um quarto alugado, uma varanda, ou um café que você paga porque o espaço é pequeno. Ela ainda pode ser real.",
+      "Algumas irmãs não foram bem recebidas, então abrir a porta parece arriscado. Comece menor do que um espetáculo. Comece com presença.",
+      "<strong>Irmãs, o reino muitas vezes entra por uma porta comum que está aberta.</strong>",
+      "Abram lugar para alguém nesta semana sem precisar que a casa — ou vocês — pareça pronta."
+    ],
+    questions: [
+      "Você adia o acolhimento até a sua casa ou a sua vida parecer pronta?",
+      "Onde a murmuração quieta tomou o lugar da generosidade?",
+      "Quem poderia sentar com você nesta semana sem um plano impressionante?"
+    ]
+  }
+},
+{
+  id: "waiting",
+  en: {
+    ref: "Isaiah 40:31",
+    verse: "“They who wait for the Lord shall renew their strength; they shall mount up with wings like eagles; they shall run and not be weary; they shall walk and not faint.”",
+    title: "Strength for the Wait",
+    body: [
+      "Waiting feels like nothing is happening. Isaiah says it is where strength is renewed — not where it is wasted.",
+      "To wait for the Lord is not sulking with a calendar. It is an active lean: eyes on Him while the answer is still on the way.",
+      "The promise has three speeds. Some seasons you soar. Some you run. Some you only walk and do not faint. All three are faith.",
+      "Women are often praised for hurry and quietly shamed for the long middle. God meets you in the middle.",
+      "<strong>Sisters, the in-between is not proof that He forgot the prayer.</strong>",
+      "Wait on Him there — not only on the timeline you wrote — and let Him renew what hurry has drained."
+    ],
+    questions: [
+      "What are you waiting for that has started to feel like abandonment?",
+      "Are you trying to sprint through a season that is asking you to walk and not faint?",
+      "How can you wait for the Lord in a concrete way this week?"
+    ]
+  },
+  es: {
+    ref: "Isaías 40:31",
+    verse: "“Los que esperan en el Señor renovarán sus fuerzas; levantarán alas como las águilas; correrán y no se cansarán; caminarán y no se fatigarán.”",
+    title: "Fuerza para la Espera",
+    body: [
+      "Esperar se siente como si nada pasara. Isaías dice que ahí se renuevan las fuerzas — no que ahí se desperdician.",
+      "Esperar en el Señor no es reclamarle al calendario. Es un apoyo activo: los ojos en Él mientras la respuesta todavía viene en camino.",
+      "La promesa tiene tres velocidades. En algunas temporadas vuelas. En otras corres. En otras solo caminas y no te rindes. Las tres son fe.",
+      "A las mujeres a menudo se les elogia la prisa y se les avergüenza en silencio el largo medio. Dios te encuentra en el medio.",
+      "<strong>Hermanas, el entretanto no es prueba de que Él olvidó la oración.</strong>",
+      "Esperen en Él ahí — no solo en el plazo que escribieron — y dejen que renueve lo que la prisa ha drenado."
+    ],
+    questions: [
+      "¿Qué estás esperando que ha empezado a sentirse como abandono?",
+      "¿Estás tratando de correr una temporada que te pide caminar y no rendirte?",
+      "¿Cómo puedes esperar en el Señor de una forma concreta esta semana?"
+    ]
+  },
+  pt: {
+    ref: "Isaías 40:31",
+    verse: "“Os que esperam no Senhor renovam as suas forças; sobem com asas como águias; correm e não se cansam; caminham e não desfalecem.”",
+    title: "Força para a Espera",
+    body: [
+      "Esperar parece que nada está acontecendo. Isaías diz que é ali que a força se renova — não que é ali que ela se desperdiça.",
+      "Esperar no Senhor não é reclamar do calendário. É um apoio ativo: os olhos nele enquanto a resposta ainda está a caminho.",
+      "A promessa tem três velocidades. Em algumas estações você voa. Em outras você corre. Em outras você só caminha e não desfalece. As três são fé.",
+      "Mulheres muitas vezes são elogiadas pela pressa e envergonhadas em silêncio pelo meio longo. Deus encontra você no meio.",
+      "<strong>Irmãs, o entremeio não é prova de que Ele esqueceu a oração.</strong>",
+      "Esperem nele ali — não só no prazo que vocês escreveram — e deixem que Ele renove o que a pressa drenou."
+    ],
+    questions: [
+      "O que você está esperando que começou a parecer abandono?",
+      "Você está tentando correr uma estação que está pedindo que você caminhe e não desfaleça?",
+      "Como você pode esperar no Senhor de um modo concreto nesta semana?"
+    ]
+  }
+},
+{
+  id: "prayer",
+  en: {
+    ref: "Matthew 6:6",
+    verse: "“But when you pray, go into your room and shut the door and pray to your Father who is in secret. And your Father who sees in secret will reward you.”",
+    title: "The Door You Close",
+    body: [
+      "Jesus is not against praying with sisters. He is against praying as a performance.",
+      "The secret room is wherever you stop managing how you sound and start telling the truth to your Father. A parked car counts. A few quiet minutes before the house wakes count.",
+      "He already sees in secret. You do not have to brief Him with polished sentences. You can bring the unsorted day.",
+      "The reward is not a prize for eloquent women. It is the Father meeting the daughter who came looking for Him, not for an audience.",
+      "<strong>Sisters, you do not need a perfect quiet hour to have a real prayer.</strong>",
+      "Close one small door today — phone down, honest words up — and let Him see you there."
+    ],
+    questions: [
+      "Has prayer become something you perform, postpone, or only do where others can hear?",
+      "What would a hidden, honest conversation with the Father look like in your actual day?",
+      "What have you not said to Him plainly because you were still editing yourself?"
+    ]
+  },
+  es: {
+    ref: "Mateo 6:6",
+    verse: "“Mas tú, cuando ores, entra en tu aposento, cierra la puerta y ora a tu Padre que está en lo secreto. Y tu Padre, que ve en lo secreto, te recompensará.”",
+    title: "La Puerta Que Cierras",
+    body: [
+      "Jesús no está en contra de orar con las hermanas. Está en contra de orar como una función.",
+      "El cuarto secreto es cualquier lugar donde dejas de administrar cómo suenas y empiezas a decirle la verdad a tu Padre. Un auto estacionado cuenta. Unos minutos quietos antes de que la casa despierte cuentan.",
+      "Él ya ve en lo secreto. No tienes que informarle con frases pulidas. Puedes traer el día sin ordenar.",
+      "La recompensa no es un premio para mujeres elocuentes. Es el Padre encontrándose con la hija que vino a buscarlo a Él, no a un público.",
+      "<strong>Hermanas, no necesitan una hora perfecta de silencio para tener una oración real.</strong>",
+      "Cierren una puerta pequeña hoy — el teléfono abajo, las palabras honestas arriba — y dejen que Él las vea ahí."
+    ],
+    questions: [
+      "¿La oración se ha vuelto algo que actúas, pospones, o solo haces donde otras pueden oír?",
+      "¿Cómo se vería una conversación escondida y honesta con el Padre en tu día real?",
+      "¿Qué no le has dicho con claridad porque todavía te estabas editando?"
+    ]
+  },
+  pt: {
+    ref: "Mateus 6:6",
+    verse: "“Mas você, quando orar, entre no seu quarto, feche a porta e ore ao seu Pai, que está em secreto. E o seu Pai, que vê em secreto, te recompensará.”",
+    title: "A Porta Que Você Fecha",
+    body: [
+      "Jesus não é contra orar com as irmãs. Ele é contra orar como um espetáculo.",
+      "O quarto secreto é qualquer lugar onde você para de administrar o seu tom e começa a dizer a verdade ao seu Pai. Um carro estacionado conta. Uns minutos quietos antes de a casa acordar contam.",
+      "Ele já vê em secreto. Você não precisa informá-lo com frases polidas. Você pode trazer o dia ainda sem ordem.",
+      "A recompensa não é um prêmio para mulheres eloquentes. É o Pai encontrando a filha que veio buscar a Ele, não uma plateia.",
+      "<strong>Irmãs, vocês não precisam de uma hora perfeita de silêncio para ter uma oração real.</strong>",
+      "Fechem uma porta pequena hoje — o telefone para baixo, as palavras honestas para cima — e deixem que Ele veja vocês ali."
+    ],
+    questions: [
+      "A oração virou algo que você representa, adia, ou só faz onde outras pessoas podem ouvir?",
+      "Como seria uma conversa escondida e honesta com o Pai no seu dia real?",
+      "O que você ainda não disse a Ele com clareza porque estava se editando?"
+    ]
+  }
+}
+];
+
+const PROVERBS31 = [
+{
+  id: "p31-counsel",
+  en: {
+    ref: "Proverbs 31:1-9",
+    verse: "“The words of King Lemuel, an oracle his mother taught him. Open your mouth for those who cannot speak, and plead the cause of the poor and needy.”",
+    title: "A Mother’s Counsel",
+    body: [
+      "Proverbs 31 opens with a woman teaching. Before the famous portrait of the virtuous woman, a mother instructs a king.",
+      "Her counsel is about power used cleanly: do not numb your judgment, do not waste your strength, and do not forget the people who have no voice in the room.",
+      "She tells him to speak for the mute and to judge with righteousness. Influence, in her mouth, is a trust — not a spotlight.",
+      "Sisters carry influence too: in a home, a workplace, a group chat, a church hallway. A clear mind and a brave word still matter.",
+      "<strong>Sisters, a mother’s wisdom here is simple and costly: stay sober in spirit, and spend your voice on the vulnerable.</strong>",
+      "Ask where your words could plead for someone who cannot get a hearing."
+    ],
+    questions: [
+      "Where has comfort, hurry, or distraction clouded a judgment you were trusted to make?",
+      "Who around you has little voice, and what would it mean to open your mouth for them?",
+      "What kind of counsel do you want to be remembered for giving?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:1-9",
+    verse: "“Palabras del rey Lemuel, enseñanza que le dio su madre. Abre tu boca por el que no puede hablar, y defiende la causa del pobre y del necesitado.”",
+    title: "El Consejo de una Madre",
+    body: [
+      "Proverbios 31 empieza con una mujer que enseña. Antes del retrato famoso de la mujer virtuosa, una madre instruye a un rey.",
+      "Su consejo trata del poder usado con limpieza: no adormezcas tu juicio, no desperdicies tu fuerza, no olvides a la gente que no tiene voz en la sala.",
+      "Le dice que hable por el mudo y que juzgue con justicia. La influencia, en su boca, es un encargo, no un reflector.",
+      "Las hermanas también llevan influencia: en una casa, un trabajo, un chat, un pasillo de la iglesia. Una mente clara y una palabra valiente todavía importan.",
+      "<strong>Hermanas, la sabiduría de esta madre es simple y costosa: permanezcan sobrias en el espíritu, y gasten su voz en los vulnerables.</strong>",
+      "Pregunten dónde sus palabras podrían defender a alguien que no consigue ser oído."
+    ],
+    questions: [
+      "¿Dónde la comodidad, la prisa o la distracción han nublado un juicio que te fue confiado?",
+      "¿Quién a tu alrededor tiene poca voz, y qué significaría abrir tu boca por esa persona?",
+      "¿Qué clase de consejo quieres que recuerden que diste?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:1-9",
+    verse: "“Palavras do rei Lemuel, ensino que sua mãe lhe deu. Abra a boca pelos que não podem falar, e defenda a causa do pobre e do necessitado.”",
+    title: "O Conselho de uma Mãe",
+    body: [
+      "Provérbios 31 começa com uma mulher que ensina. Antes do retrato famoso da mulher virtuosa, uma mãe instrui um rei.",
+      "O conselho dela é sobre poder usado com limpidez: não entorpeça o seu juízo, não desperdice a sua força, não esqueça as pessoas que não têm voz na sala.",
+      "Ela diz a ele que fale pelo mudo e julgue com justiça. Influência, na boca dela, é um encargo — não um holofote.",
+      "Irmãs também carregam influência: numa casa, num trabalho, num grupo, num corredor da igreja. Uma mente clara e uma palavra corajosa ainda importam.",
+      "<strong>Irmãs, a sabedoria dessa mãe é simples e custosa: permaneçam sóbrias no espírito, e gastem a voz de vocês com os vulneráveis.</strong>",
+      "Perguntem onde as palavras de vocês poderiam defender alguém que não consegue ser ouvido."
+    ],
+    questions: [
+      "Onde o conforto, a pressa ou a distração turvaram um juízo que foi confiado a você?",
+      "Quem ao seu redor tem pouca voz, e o que significaria abrir a sua boca por essa pessoa?",
+      "Que tipo de conselho você quer que lembrem que você deu?"
+    ]
+  }
+},
+{
+  id: "p31-trust",
+  en: {
+    ref: "Proverbs 31:10-12",
+    verse: "“A woman of valor — who can find her? Her worth is far above jewels. The heart of her husband trusts in her, and she does him good, and not harm, all the days of her life.”",
+    title: "Worth Trusting",
+    body: [
+      "The chapter turns from a mother’s counsel to a woman whose character can be safely leaned on.",
+      "“Who can find her?” is wonder, not a ranking that leaves ordinary sisters out. Her worth is not priced by trend or age. It is far above jewels because of who she is, not what she displays.",
+      "If you are a wife, this is a call to be safe to trust — good, not harm, across ordinary days, not only on the days you feel admired.",
+      "If you are not married, the virtue still names you. In friendship, work, and family, be a woman whose word and presence do good.",
+      "<strong>Sisters, character is the kind of beauty people can rest their weight on.</strong>",
+      "Let someone find you trustworthy in one concrete way today."
+    ],
+    questions: [
+      "Where are you tempted to chase a visible shine instead of a trustable character?",
+      "Who needs you to do them good — not harm — in the small dealings of this week?",
+      "What would it mean for your worth to rest on God’s measure, not on being impressive?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:10-12",
+    verse: "“Mujer de valor, ¿quién la hallará? Su precio es mucho más alto que las joyas. El corazón de su marido confía en ella, y ella le hace bien, y no mal, todos los días de su vida.”",
+    title: "Digna de Confianza",
+    body: [
+      "El capítulo pasa del consejo de una madre a una mujer en cuyo carácter se puede apoyar con seguridad.",
+      "“¿Quién la hallará?” es asombro, no un ranking que deja fuera a las hermanas comunes. Su valor no lo pone la moda ni la edad. Está muy por encima de las joyas por quién es, no por lo que exhibe.",
+      "Si eres esposa, este es un llamado a ser segura para confiar: bien, no mal, en los días ordinarios, no solo en los días en que te sientes admirada.",
+      "Si no estás casada, la virtud igual te nombra. En la amistad, el trabajo y la familia, sé una mujer cuya palabra y presencia hacen bien.",
+      "<strong>Hermanas, el carácter es la belleza sobre la que otros pueden recargar su peso.</strong>",
+      "Dejen que alguien las encuentre confiables de una forma concreta hoy."
+    ],
+    questions: [
+      "¿Dónde tienes la tentación de buscar un brillo visible en lugar de un carácter confiable?",
+      "¿A quién necesitas hacerle bien — no mal — en los tratos pequeños de esta semana?",
+      "¿Qué significaría que tu valor descanse en la medida de Dios, no en impresionar?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:10-12",
+    verse: "“Mulher de valor, quem a achará? O seu preço é muito maior que joias. O coração do seu marido confia nela, e ela lhe faz o bem, e não o mal, todos os dias da sua vida.”",
+    title: "Digna de Confiança",
+    body: [
+      "O capítulo passa do conselho de uma mãe para uma mulher em cujo caráter se pode apoiar com segurança.",
+      "“Quem a achará?” é espanto, não um ranking que deixa as irmãs comuns de fora. O valor dela não é marcado pela moda nem pela idade. Está muito acima de joias por quem ela é, não pelo que exibe.",
+      "Se você é esposa, este é um chamado a ser segura para confiar — o bem, não o mal, nos dias comuns, não só nos dias em que se sente admirada.",
+      "Se você não é casada, a virtude ainda te nomeia. Na amizade, no trabalho e na família, seja uma mulher cuja palavra e presença fazem o bem.",
+      "<strong>Irmãs, o caráter é a beleza sobre a qual as pessoas podem apoiar o peso.</strong>",
+      "Deixem que alguém encontre vocês confiáveis de um modo concreto hoje."
+    ],
+    questions: [
+      "Onde você é tentada a buscar um brilho visível em vez de um caráter confiável?",
+      "A quem você precisa fazer o bem — não o mal — nos pequenos tratos desta semana?",
+      "O que significaria o seu valor descansar na medida de Deus, não em impressionar?"
+    ]
+  }
+},
+{
+  id: "p31-work",
+  en: {
+    ref: "Proverbs 31:13-15",
+    verse: "“She seeks wool and flax, and works with willing hands. She is like the ships of the merchant; she brings her food from afar. She rises while it is yet night and provides for her household.”",
+    title: "Willing Hands",
+    body: [
+      "This woman is not praised for being busy so she can be admired. She is praised for work that feeds people.",
+      "Willing hands are different from frantic hands. She chooses the task — wool, flax, food from far off — and she does it as service, not as a performance of exhaustion.",
+      "Rising while it is still night is not a command to skip rest. It is a picture of a woman who does not wait to be chased into love. She moves toward the need.",
+      "Your household may be children, parents, roommates, coworkers, or a church family. Provision is wider than a grocery list.",
+      "<strong>Sisters, holy work is often ordinary, early, and aimed at someone else’s hunger.</strong>",
+      "Offer your hands willingly to one real need today — without needing the work to make you impressive."
+    ],
+    questions: [
+      "Is your work aimed at feeding people, or at proving you are enough?",
+      "Where have willing hands turned into resentful hurry?",
+      "Who is in your household of care, and what do they actually need from you this week?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:13-15",
+    verse: "“Busca lana y lino, y trabaja con manos dispuestas. Es como las naves del mercader: trae su alimento de lejos. Se levanta cuando aún es de noche y provee para su casa.”",
+    title: "Manos Dispuestas",
+    body: [
+      "A esta mujer no se le alaba por estar ocupada para que la admiren. Se le alaba por un trabajo que alimenta a personas.",
+      "Las manos dispuestas son distintas de las manos frenéticas. Ella elige la tarea — lana, lino, comida de lejos — y la hace como servicio, no como una función de agotamiento.",
+      "Levantarse de noche no es una orden de saltarse el descanso. Es el retrato de una mujer que no espera a que la persigan para amar. Se mueve hacia la necesidad.",
+      "Tu casa pueden ser hijos, padres, compañeras de cuarto, colegas o una familia de iglesia. Proveer es más ancho que una lista del mercado.",
+      "<strong>Hermanas, el trabajo santo suele ser ordinario, temprano, y dirigido al hambre de alguien más.</strong>",
+      "Ofrezcan sus manos con disposición a una necesidad real hoy — sin necesitar que el trabajo las haga impresionantes."
+    ],
+    questions: [
+      "¿Tu trabajo está dirigido a alimentar personas, o a probar que eres suficiente?",
+      "¿Dónde las manos dispuestas se volvieron prisa resentida?",
+      "¿Quién está en tu casa de cuidado, y qué necesita de verdad de ti esta semana?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:13-15",
+    verse: "“Ela busca lã e linho, e trabalha com mãos dispostas. É como os navios do mercador: traz de longe o seu alimento. Levanta-se quando ainda é noite e provê para a sua casa.”",
+    title: "Mãos Dispostas",
+    body: [
+      "Essa mulher não é elogiada por estar ocupada para ser admirada. Ela é elogiada por um trabalho que alimenta pessoas.",
+      "Mãos dispostas são diferentes de mãos frenéticas. Ela escolhe a tarefa — lã, linho, comida de longe — e faz isso como serviço, não como um espetáculo de exaustão.",
+      "Levantar-se de noite não é uma ordem para pular o descanso. É o retrato de uma mulher que não espera ser perseguida para amar. Ela se move em direção à necessidade.",
+      "A sua casa podem ser filhos, pais, colegas de quarto, pessoas do trabalho ou uma família da igreja. Prover é mais largo que uma lista de mercado.",
+      "<strong>Irmãs, o trabalho santo muitas vezes é comum, cedo, e voltado para a fome de outra pessoa.</strong>",
+      "Ofereçam as mãos de vocês com disposição a uma necessidade real hoje — sem precisar que o trabalho as faça impressionantes."
+    ],
+    questions: [
+      "O seu trabalho está voltado a alimentar pessoas, ou a provar que você é suficiente?",
+      "Onde mãos dispostas viraram pressa ressentida?",
+      "Quem está na sua casa de cuidado, e do que essa pessoa realmente precisa de você nesta semana?"
+    ]
+  }
+},
+{
+  id: "p31-enterprise",
+  en: {
+    ref: "Proverbs 31:16-18",
+    verse: "“She considers a field and buys it; with the fruit of her hands she plants a vineyard. She dresses herself with strength and makes her arms strong. She sees that her work is good; her lamp does not go out at night.”",
+    title: "She Considers, Then Builds",
+    body: [
+      "This woman is not reckless, and she is not passive. She considers — then she buys, plants, and strengthens her arms for the work.",
+      "Enterprise here is not greed. It is stewardship. She takes what her hands have already earned and puts it to work again, so the household can flourish.",
+      "Strength in these verses is practical: arms made strong by use, a mind awake enough to know that what she is making is good.",
+      "You may not be buying fields. You may be learning a skill, stretching a budget, starting something small, or simply refusing to call your labor worthless.",
+      "<strong>Sisters, wisdom looks before it leaps — and then it actually builds.</strong>",
+      "Consider one faithful next step for the work God has put in your hands, and take it without shrinking."
+    ],
+    questions: [
+      "Where are you either rushing without considering, or considering forever and never planting?",
+      "What fruit of your hands could be reinvested in something that serves your people?",
+      "Do you believe the work in front of you can be good, even if it is still small?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:16-18",
+    verse: "“Considera un campo y lo compra; con el fruto de sus manos planta una viña. Se ciñe de fuerza y fortalece sus brazos. Ve que su trabajo es bueno; su lámpara no se apaga de noche.”",
+    title: "Considera, y Luego Edifica",
+    body: [
+      "Esta mujer no es imprudente, y no es pasiva. Considera — y luego compra, planta y fortalece sus brazos para el trabajo.",
+      "La empresa aquí no es avaricia. Es mayordomía. Toma lo que sus manos ya ganaron y lo pone a trabajar de nuevo, para que la casa florezca.",
+      "La fuerza en estos versículos es práctica: brazos fortalecidos por el uso, una mente despierta que sabe que lo que hace es bueno.",
+      "Puede que no estés comprando campos. Puede que estés aprendiendo un oficio, estirando un presupuesto, empezando algo pequeño, o simplemente negándote a llamar inútil tu labor.",
+      "<strong>Hermanas, la sabiduría mira antes de saltar — y luego de verdad edifica.</strong>",
+      "Consideren un siguiente paso fiel para el trabajo que Dios puso en sus manos, y denlo sin encogerse."
+    ],
+    questions: [
+      "¿Dónde estás o apresurándote sin considerar, o considerando para siempre y nunca plantando?",
+      "¿Qué fruto de tus manos podría reinvertirse en algo que sirva a tu gente?",
+      "¿Crees que el trabajo que tienes delante puede ser bueno, aunque todavía sea pequeño?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:16-18",
+    verse: "“Ela considera um campo e o compra; com o fruto das suas mãos planta uma vinha. Cinge-se de força e fortalece os seus braços. Vê que o seu trabalho é bom; a sua lâmpada não se apaga de noite.”",
+    title: "Ela Considera, e Depois Edifica",
+    body: [
+      "Essa mulher não é imprudente, e não é passiva. Ela considera — e depois compra, planta e fortalece os braços para o trabalho.",
+      "Iniciativa aqui não é ganância. É mordomia. Ela pega o que as mãos dela já ganharam e põe de novo para trabalhar, para que a casa floresça.",
+      "Força nestes versículos é prática: braços fortalecidos pelo uso, uma mente acordada o bastante para saber que o que ela faz é bom.",
+      "Você pode não estar comprando campos. Pode estar aprendendo um ofício, esticando um orçamento, começando algo pequeno, ou simplesmente recusando chamar o seu trabalho de inútil.",
+      "<strong>Irmãs, a sabedoria olha antes de saltar — e depois ela de fato edifica.</strong>",
+      "Considerem um próximo passo fiel para o trabalho que Deus pôs nas mãos de vocês, e deem esse passo sem encolher."
+    ],
+    questions: [
+      "Onde você ou está se apressando sem considerar, ou considerando para sempre e nunca plantando?",
+      "Que fruto das suas mãos poderia ser reinvestido em algo que sirva ao seu povo?",
+      "Você crê que o trabalho à sua frente pode ser bom, mesmo que ainda seja pequeno?"
+    ]
+  }
+},
+{
+  id: "p31-hands",
+  en: {
+    ref: "Proverbs 31:19-22",
+    verse: "“She puts her hands to the distaff, and her hands hold the spindle. She opens her hand to the poor and reaches out her hands to the needy. She is not afraid of snow for her household, for all her household are clothed.”",
+    title: "Hands That Cover",
+    body: [
+      "Her hands do two things at once: they work the spindle, and they open toward the poor.",
+      "Industry without mercy becomes a closed fist. Mercy without diligence becomes a wish. This woman weaves them together. What she makes becomes covering — for her own household, and for the neighbor who has less.",
+      "She is not afraid of the snow because she prepared before the weather arrived. Care looks ahead.",
+      "Clothing her household is not a lecture about luxury. It is a picture of dignity: people under her care are not left exposed.",
+      "<strong>Sisters, strong hands are holy when they both work and give.</strong>",
+      "Let one hour of your skill, or one open hand, cover someone who is out in the weather."
+    ],
+    questions: [
+      "Are your hands mostly closed around your own tasks, or also open toward need?",
+      "What coming “snow” faces someone in your care, and how can you prepare with love instead of panic?",
+      "Where could your ordinary skill become covering for a sister, a child, or a neighbor?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:19-22",
+    verse: "“Aplica sus manos a la rueca, y sus manos toman el huso. Alarga su mano al pobre y extiende sus manos al necesitado. No teme por su casa la nieve, porque toda su casa está vestida.”",
+    title: "Manos Que Cubren",
+    body: [
+      "Sus manos hacen dos cosas a la vez: trabajan el huso y se abren hacia el pobre.",
+      "El trabajo sin misericordia se vuelve un puño cerrado. La misericordia sin diligencia se vuelve un deseo. Esta mujer las teje juntas. Lo que hace se vuelve abrigo: para su propia casa y para el vecino que tiene menos.",
+      "No teme la nieve porque preparó antes de que llegara el clima. El cuidado mira hacia adelante.",
+      "Vestir a su casa no es una clase sobre el lujo. Es una imagen de dignidad: la gente a su cuidado no queda expuesta.",
+      "<strong>Hermanas, las manos fuertes son santas cuando trabajan y también dan.</strong>",
+      "Dejen que una hora de su habilidad, o una mano abierta, cubra a alguien que está a la intemperie."
+    ],
+    questions: [
+      "¿Tus manos están sobre todo cerradas en tus propias tareas, o también abiertas hacia la necesidad?",
+      "¿Qué “nieve” viene para alguien a tu cuidado, y cómo puedes preparar con amor en lugar de pánico?",
+      "¿Dónde tu habilidad ordinaria podría volverse abrigo para una hermana, un hijo o un vecino?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:19-22",
+    verse: "“Estende as mãos ao fuso, e as suas mãos pegam na roca. Abre a mão ao pobre e estende as mãos ao necessitado. Não teme a neve pela sua casa, porque toda a sua casa está vestida.”",
+    title: "Mãos Que Cobrem",
+    body: [
+      "As mãos dela fazem duas coisas ao mesmo tempo: trabalham no fuso e se abrem para o pobre.",
+      "Trabalho sem misericórdia vira um punho fechado. Misericórdia sem diligência vira um desejo. Essa mulher tece as duas juntas. O que ela faz vira cobertura — para a própria casa e para o vizinho que tem menos.",
+      "Ela não teme a neve porque preparou antes de o tempo chegar. O cuidado olha para frente.",
+      "Vestir a casa dela não é uma aula sobre luxo. É uma imagem de dignidade: as pessoas sob o cuidado dela não ficam expostas.",
+      "<strong>Irmãs, mãos fortes são santas quando trabalham e também dão.</strong>",
+      "Deixem que uma hora da habilidade de vocês, ou uma mão aberta, cubra alguém que está no frio."
+    ],
+    questions: [
+      "As suas mãos estão sobretudo fechadas nas suas próprias tarefas, ou também abertas para a necessidade?",
+      "Que “neve” está vindo para alguém sob o seu cuidado, e como você pode preparar com amor em vez de pânico?",
+      "Onde a sua habilidade comum poderia virar cobertura para uma irmã, um filho ou um vizinho?"
+    ]
+  }
+},
+{
+  id: "p31-dignity",
+  en: {
+    ref: "Proverbs 31:23-25",
+    verse: "“Her husband is known in the gates, where he sits among the elders. She makes linen and sells it. Strength and dignity are her clothing, and she laughs at the time to come.”",
+    title: "Clothed in Dignity",
+    body: [
+      "The gates were where a city’s honor was decided. This woman does not steal that honor. Her life adds to it. She also has her own work: linen made, sold, and offered.",
+      "Whether or not you have a husband, the picture still speaks. A kingdom sister does not live off someone else’s reputation, and she does not have to shrink so others can stand.",
+      "Strength and dignity are what she wears — the same clothing named in our theme on strength, now seen inside the whole chapter. It is not hardness. It is a woman secure enough to face tomorrow without panic.",
+      "She can laugh at the days ahead because her security is not the market, the mirror, or the next crisis. It is the Lord she fears, named at the end of the song.",
+      "<strong>Sisters, dignity is not an outfit you borrow for an audience. It is what you are already wearing.</strong>",
+      "Let strength and dignity answer the next uncertain thing, before anxiety does."
+    ],
+    questions: [
+      "Do you add honor to the people beside you, or are you mostly managing an image?",
+      "Where do you laugh at the future — and where do you brace for it?",
+      "What would it look like to wear dignity into one hard conversation this week?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:23-25",
+    verse: "“Su marido es conocido en las puertas, cuando se sienta con los ancianos de la tierra. Hace telas de lino y las vende. La fuerza y la dignidad son su vestidura, y se ríe de lo por venir.”",
+    title: "Vestida de Dignidad",
+    body: [
+      "Las puertas eran donde se decidía el honor de una ciudad. Esta mujer no roba ese honor. Su vida lo aumenta. También tiene su propio trabajo: lino hecho, vendido y ofrecido.",
+      "Tengas esposo o no, el retrato todavía habla. Una hermana del reino no vive de la reputación de otra persona, y no tiene que encogerse para que otros puedan estar de pie.",
+      "La fuerza y la dignidad son lo que viste — la misma vestidura de nuestro tema sobre la fortaleza, ahora vista dentro de todo el capítulo. No es dureza. Es una mujer lo bastante segura para mirar el mañana sin pánico.",
+      "Puede reírse de los días que vienen porque su seguridad no es el mercado, el espejo ni la próxima crisis. Es el Señor a quien teme, nombrado al final del canto.",
+      "<strong>Hermanas, la dignidad no es un atuendo que se pide prestado para un público. Es lo que ya llevan puesto.</strong>",
+      "Dejen que la fuerza y la dignidad respondan a lo incierto que sigue, antes de que lo haga la ansiedad."
+    ],
+    questions: [
+      "¿Añades honor a las personas a tu lado, o sobre todo administras una imagen?",
+      "¿Dónde te ríes del futuro — y dónde te preparas para lo peor?",
+      "¿Cómo se vería vestir dignidad en una conversación difícil esta semana?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:23-25",
+    verse: "“O seu marido é conhecido nas portas, quando se assenta com os anciãos da terra. Ela faz linho e o vende. Força e dignidade são a sua veste, e ela ri do dia futuro.”",
+    title: "Vestida de Dignidade",
+    body: [
+      "As portas eram onde a honra de uma cidade se decidia. Essa mulher não rouba essa honra. A vida dela a aumenta. Ela também tem o próprio trabalho: linho feito, vendido e oferecido.",
+      "Tenha você marido ou não, o retrato ainda fala. Uma irmã do reino não vive da reputação de outra pessoa, e não precisa encolher para que os outros possam ficar de pé.",
+      "Força e dignidade são o que ela veste — a mesma veste do nosso tema sobre a força, agora vista dentro do capítulo inteiro. Não é dureza. É uma mulher segura o bastante para olhar o amanhã sem pânico.",
+      "Ela pode rir dos dias que vêm porque a segurança dela não é o mercado, o espelho nem a próxima crise. É o Senhor a quem ela teme, nomeado no fim do cântico.",
+      "<strong>Irmãs, dignidade não é uma roupa emprestada para uma plateia. É o que vocês já estão vestindo.</strong>",
+      "Deixem que a força e a dignidade respondam à próxima coisa incerta, antes que a ansiedade responda."
+    ],
+    questions: [
+      "Você acrescenta honra às pessoas ao seu lado, ou sobretudo administra uma imagem?",
+      "Onde você ri do futuro — e onde você se prepara para o pior?",
+      "Como seria vestir dignidade numa conversa difícil nesta semana?"
+    ]
+  }
+},
+{
+  id: "p31-kindness",
+  en: {
+    ref: "Proverbs 31:26-27",
+    verse: "“She opens her mouth with wisdom, and the teaching of kindness is on her tongue. She looks well to the ways of her household and does not eat the bread of idleness.”",
+    title: "Kindness on Her Tongue",
+    body: [
+      "Wisdom and kindness share the same mouth. She does not use insight to cut, and she does not use sweetness to avoid the truth.",
+      "The teaching of kindness means her words instruct. People around her learn what love sounds like because she speaks it on ordinary Tuesdays.",
+      "She also watches the ways of her household. Love pays attention. It notices who is drifting, who is hungry, who is pretending to be fine.",
+      "Refusing the bread of idleness is not a jab at rest. It is a refusal to live careless while people in her care need a faithful eye.",
+      "<strong>Sisters, a watched home and a kind tongue belong together.</strong>",
+      "Let your next sentence teach kindness — and let your eyes actually see the people in your care."
+    ],
+    questions: [
+      "When you open your mouth, do wisdom and kindness arrive together, or does one come without the other?",
+      "What in your household’s ways needs a faithful look this week?",
+      "Where have you called neglect “rest,” or called harshness “honesty”?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:26-27",
+    verse: "“Abre su boca con sabiduría, y la enseñanza de la bondad está en su lengua. Mira bien los caminos de su casa, y no come el pan de la ociosidad.”",
+    title: "Bondad en su Lengua",
+    body: [
+      "La sabiduría y la bondad comparten la misma boca. Ella no usa el discernimiento para cortar, y no usa la dulzura para evitar la verdad.",
+      "La enseñanza de la bondad significa que sus palabras instruyen. La gente a su alrededor aprende cómo suena el amor porque ella lo habla en los martes ordinarios.",
+      "También mira bien los caminos de su casa. El amor presta atención. Nota quién se está alejando, quién tiene hambre, quién finge que está bien.",
+      "Rechazar el pan de la ociosidad no es un golpe contra el descanso. Es negarse a vivir descuidada mientras las personas a su cargo necesitan un ojo fiel.",
+      "<strong>Hermanas, una casa atendida y una lengua bondadosa van juntas.</strong>",
+      "Que su próxima frase enseñe bondad — y que sus ojos vean de verdad a las personas a su cuidado."
+    ],
+    questions: [
+      "Cuando abres la boca, ¿llegan juntas la sabiduría y la bondad, o una viene sin la otra?",
+      "¿Qué en los caminos de tu casa necesita una mirada fiel esta semana?",
+      "¿Dónde has llamado “descanso” al descuido, o “honestidad” a la dureza?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:26-27",
+    verse: "“Abre a boca com sabedoria, e o ensino da bondade está na sua língua. Olha bem pelos caminhos da sua casa, e não come o pão da preguiça.”",
+    title: "Bondade na Língua",
+    body: [
+      "Sabedoria e bondade dividem a mesma boca. Ela não usa o discernimento para cortar, e não usa a doçura para evitar a verdade.",
+      "O ensino da bondade significa que as palavras dela instruem. As pessoas ao redor aprendem como o amor soa porque ela o fala nas terças comuns.",
+      "Ela também olha bem pelos caminhos da sua casa. O amor presta atenção. Nota quem está se afastando, quem está com fome, quem finge que está bem.",
+      "Recusar o pão da preguiça não é um ataque ao descanso. É recusar viver descuidada enquanto as pessoas sob o seu cuidado precisam de um olho fiel.",
+      "<strong>Irmãs, uma casa observada e uma língua bondosa andam juntas.</strong>",
+      "Que a próxima frase de vocês ensine bondade — e que os olhos de vocês vejam de fato as pessoas sob o seu cuidado."
+    ],
+    questions: [
+      "Quando você abre a boca, sabedoria e bondade chegam juntas, ou uma vem sem a outra?",
+      "O que nos caminhos da sua casa precisa de um olhar fiel nesta semana?",
+      "Onde você chamou descuido de “descanso”, ou dureza de “honestidade”?"
+    ]
+  }
+},
+{
+  id: "p31-praise",
+  en: {
+    ref: "Proverbs 31:28-29",
+    verse: "“Her children rise up and call her blessed; her husband also, and he praises her: ‘Many women have done excellently, but you surpass them all.’”",
+    title: "They Call Her Blessed",
+    body: [
+      "The praise in this scene does not come from a crowd she performed for. It comes from the people who lived with her.",
+      "Children rising to call her blessed is the long fruit of ordinary days. A husband praising her is public honor rooted in private good. If those relationships are not your story, do not hear a verdict against you. Hear the direction of the text: real praise grows close to home.",
+      "“You surpass them all” is said to one woman, face to face. It is not an invitation for sisters to compete. Excellence here is faithfulness, not a scoreboard.",
+      "Some of you are waiting to be noticed by people who will never say this sentence. Let the Lord be the first voice that calls you blessed — and become a woman who says it truly to others.",
+      "<strong>Sisters, the best praise is not managed. It is earned in the rooms where you are fully known.</strong>",
+      "Bless someone aloud this week who has done good near you, and receive the blessing God already speaks over your hidden faithfulness."
+    ],
+    questions: [
+      "Whose praise are you working too hard to win?",
+      "Who in your actual life — child, friend, spouse, or sister — needs to hear specific thanks from you?",
+      "Can you let the Lord’s blessing rest on work that nobody has applauded yet?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:28-29",
+    verse: "“Se levantan sus hijos y la llaman bienaventurada; y su marido también la alaba: ‘Muchas mujeres han hecho el bien, pero tú las superas a todas.’”",
+    title: "La Llaman Bienaventurada",
+    body: [
+      "La alabanza de esta escena no viene de una multitud para la que ella actuó. Viene de las personas que vivieron con ella.",
+      "Los hijos que se levantan para llamarla bienaventurada son el fruto largo de días ordinarios. Un esposo que la alaba es honor público con raíz en el bien privado. Si esas relaciones no son tu historia, no oigas un veredicto en tu contra. Oye la dirección del texto: la alabanza real crece cerca de casa.",
+      "“Tú las superas a todas” se le dice a una mujer, cara a cara. No es una invitación a que las hermanas compitan. La excelencia aquí es fidelidad, no un marcador.",
+      "Algunas están esperando que las noten personas que nunca dirán esta frase. Dejen que el Señor sea la primera voz que las llame bienaventuradas — y sean mujeres que la dicen de verdad a otras.",
+      "<strong>Hermanas, la mejor alabanza no se administra. Se gana en los cuartos donde son plenamente conocidas.</strong>",
+      "Bendigan en voz alta esta semana a alguien que ha hecho el bien cerca de ustedes, y reciban la bendición que Dios ya dice sobre su fidelidad escondida."
+    ],
+    questions: [
+      "¿La alabanza de quién estás trabajando demasiado por ganar?",
+      "¿Quién en tu vida real — hijo, amiga, esposo o hermana — necesita oír un agradecimiento específico de ti?",
+      "¿Puedes dejar que la bendición del Señor descanse sobre un trabajo que nadie ha aplaudido todavía?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:28-29",
+    verse: "“Levantam-se seus filhos e a chamam bem-aventurada; e o seu marido também a louva: ‘Muitas mulheres procederam virtuosamente, mas você a todas supera.’”",
+    title: "Eles a Chamam de Bendita",
+    body: [
+      "O louvor desta cena não vem de uma multidão para a qual ela se apresentou. Vem das pessoas que viveram com ela.",
+      "Filhos que se levantam para chamá-la de bendita são o fruto longo de dias comuns. Um marido que a louva é honra pública com raiz no bem privado. Se essas relações não são a sua história, não ouça um veredito contra você. Ouça a direção do texto: o louvor real cresce perto de casa.",
+      "“Você a todas supera” é dito a uma mulher, face a face. Não é um convite para irmãs competirem. Excelência aqui é fidelidade, não um placar.",
+      "Algumas estão esperando ser notadas por pessoas que nunca vão dizer esta frase. Deixem o Senhor ser a primeira voz que as chama de benditas — e sejam mulheres que dizem isso de verdade a outras.",
+      "<strong>Irmãs, o melhor louvor não se administra. Ele é ganho nos cômodos onde vocês são plenamente conhecidas.</strong>",
+      "Abençoem em voz alta nesta semana alguém que fez o bem perto de vocês, e recebam a bênção que Deus já diz sobre a fidelidade escondida de vocês."
+    ],
+    questions: [
+      "O louvor de quem você está se esforçando demais para ganhar?",
+      "Quem na sua vida real — filho, amiga, cônjuge ou irmã — precisa ouvir um agradecimento específico de você?",
+      "Você consegue deixar a bênção do Senhor descansar sobre um trabalho que ninguém aplaudiu ainda?"
+    ]
+  }
+},
+{
+  id: "p31-fruit",
+  en: {
+    ref: "Proverbs 31:30-31",
+    verse: "“Charm is deceitful, and beauty is vain, but a woman who fears the Lord is to be praised. Give her of the fruit of her hands, and let her works praise her in the gates.”",
+    title: "The Woman Who Fears the Lord",
+    body: [
+      "The chapter refuses to end on charm. Charm can mislead. Beauty, pursued as a savior, does not hold. The woman who fears the Lord is the one the song finally praises.",
+      "The fear of the Lord is not terror that shrinks a sister. It is reverence that puts God first — above image, above applause, above the panic of being overlooked.",
+      "Then the text says give her the fruit of her hands. Do not only admire an ideal. Honor real work. Let what she has faithfully done speak in public, in the gates, without her having to announce herself.",
+      "This is the root under every section of the chapter: counsel, trust, work, strength, kindness, and praise all grow from fearing the Lord.",
+      "<strong>Sisters, you do not have to be dazzling. You are called to be a woman who fears the Lord.</strong>",
+      "Offer Him the work of your hands today, and let praise — if it comes — come from fruit, not from charm."
+    ],
+    questions: [
+      "Where are you trusting charm or appearance to do what only reverence for God can do?",
+      "What fruit of your hands needs to be received with thanks instead of minimized?",
+      "What would it look like, this week, to fear the Lord more than you fear being unseen?"
+    ]
+  },
+  es: {
+    ref: "Proverbios 31:30-31",
+    verse: "“Engañosa es la gracia, y vana la hermosura, pero la mujer que teme al Señor, ésa será alabada. Denle del fruto de sus manos, y alábenla en las puertas sus obras.”",
+    title: "La que Teme al Señor",
+    body: [
+      "El capítulo se niega a terminar en el encanto. El encanto puede engañar. La hermosura, perseguida como salvadora, no sostiene. La mujer que teme al Señor es a quien el canto finalmente alaba.",
+      "El temor del Señor no es un terror que encoge a una hermana. Es una reverencia que pone a Dios primero — por encima de la imagen, del aplauso y del pánico de ser pasada por alto.",
+      "Luego el texto dice que le den del fruto de sus manos. No solo admiren un ideal. Honren el trabajo real. Dejen que lo que ella ha hecho con fidelidad hable en público, en las puertas, sin que ella tenga que anunciarse.",
+      "Esta es la raíz debajo de cada sección del capítulo: el consejo, la confianza, el trabajo, la fuerza, la bondad y la alabanza crecen de temer al Señor.",
+      "<strong>Hermanas, no tienen que deslumbrar. Están llamadas a ser mujeres que temen al Señor.</strong>",
+      "Ofrézcanle hoy la obra de sus manos, y dejen que la alabanza — si llega — venga del fruto, no del encanto."
+    ],
+    questions: [
+      "¿Dónde estás confiando en el encanto o la apariencia para hacer lo que solo la reverencia a Dios puede hacer?",
+      "¿Qué fruto de tus manos necesita recibirse con gratitud en lugar de minimizarse?",
+      "¿Cómo se vería, esta semana, temer al Señor más de lo que temes no ser vista?"
+    ]
+  },
+  pt: {
+    ref: "Provérbios 31:30-31",
+    verse: "“Enganosa é a graça, e vã a formosura, mas a mulher que teme ao Senhor, essa será louvada. Deem-lhe do fruto das suas mãos, e louvem-na nas portas as suas obras.”",
+    title: "A que Teme o Senhor",
+    body: [
+      "O capítulo recusa terminar no charme. O charme pode enganar. A formosura, perseguida como salvadora, não sustenta. A mulher que teme o Senhor é quem o cântico finalmente louva.",
+      "O temor do Senhor não é um terror que encolhe uma irmã. É uma reverência que põe Deus em primeiro — acima da imagem, do aplauso e do pânico de ser deixada de lado.",
+      "Depois o texto diz que lhe deem do fruto das suas mãos. Não admirem só um ideal. Honrem o trabalho real. Deixem que o que ela fez com fidelidade fale em público, nas portas, sem que ela precise se anunciar.",
+      "Esta é a raiz debaixo de cada seção do capítulo: conselho, confiança, trabalho, força, bondade e louvor crescem de temer o Senhor.",
+      "<strong>Irmãs, vocês não precisam deslumbrar. São chamadas a ser mulheres que temem o Senhor.</strong>",
+      "Ofereçam a Ele hoje a obra das suas mãos, e deixem que o louvor — se vier — venha do fruto, não do charme."
+    ],
+    questions: [
+      "Onde você está confiando no charme ou na aparência para fazer o que só a reverência a Deus pode fazer?",
+      "Que fruto das suas mãos precisa ser recebido com gratidão em vez de diminuído?",
+      "Como seria, nesta semana, temer o Senhor mais do que temer não ser vista?"
+    ]
+  }
 }
 ];
 
 let lang = 'en';
+let track = 'themes';
 let idx = 0;
+const indices = { themes: 0, proverbs: 0 };
 const STORAGE_KEY = 'kingdom_sisters_read_days';
+const PLACE_KEY = 'kingdom_sisters_place';
+
+function activeList(){
+  return track === 'proverbs' ? PROVERBS31 : DEVOTIONALS;
+}
+function clampIdx(){
+  const list = activeList();
+  if(!list.length){ idx = 0; return; }
+  idx = ((idx % list.length) + list.length) % list.length;
+}
+function loadPlace(){
+  try{
+    const raw = localStorage.getItem(PLACE_KEY);
+    if(!raw) return null;
+    const p = JSON.parse(raw);
+    if(!p || (p.track !== 'themes' && p.track !== 'proverbs')) return null;
+    return p;
+  }catch(e){ return null; }
+}
+function savePlace(){
+  indices[track] = idx;
+  try{
+    localStorage.setItem(PLACE_KEY, JSON.stringify({
+      track: track,
+      themes: indices.themes,
+      proverbs: indices.proverbs
+    }));
+  }catch(e){}
+}
 
 function getReadSet(){
   try{
@@ -745,7 +2019,9 @@ function saveReadSet(set){
 }
 
 function render(){
-  const d = DEVOTIONALS[idx][lang];
+  clampIdx();
+  const list = activeList();
+  const d = list[idx][lang];
   const ui = UI_TEXT[lang];
 
   document.getElementById('refLine').textContent = d.ref;
@@ -780,7 +2056,7 @@ function render(){
 
   // dots
   const dotsEl = document.getElementById('dots');
-  dotsEl.innerHTML = DEVOTIONALS.map((_,i) =>
+  dotsEl.innerHTML = list.map((_,i) =>
     `<div class="dot ${i===idx?'active':''}" data-i="${i}"></div>`
   ).join('');
   dotsEl.querySelectorAll('.dot').forEach(el=>{
@@ -789,7 +2065,7 @@ function render(){
 
   // read state
   const readSet = getReadSet();
-  const key = DEVOTIONALS[idx].id;
+  const key = list[idx].id;
   const markBtn = document.getElementById('markBtn');
   if(readSet.has(key)){
     markBtn.textContent = ui.done;
@@ -799,19 +2075,29 @@ function render(){
     markBtn.classList.remove('done');
   }
   document.getElementById('streakLabel').innerHTML = ui.streak(readSet.size);
+
+  document.querySelector('#trackToggle [data-track="themes"]').textContent = ui.trackThemes;
+  document.querySelector('#trackToggle [data-track="proverbs"]').textContent = ui.trackProv;
+  document.querySelectorAll('#trackToggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.track === track);
+  });
+  document.getElementById('footerLine').textContent = ui.footer;
+  savePlace();
 }
 
 document.getElementById('prevBtn').addEventListener('click', ()=>{
-  idx = (idx - 1 + DEVOTIONALS.length) % DEVOTIONALS.length;
+  const list = activeList();
+  idx = (idx - 1 + list.length) % list.length;
   render();
 });
 document.getElementById('nextBtn').addEventListener('click', ()=>{
-  idx = (idx + 1) % DEVOTIONALS.length;
+  const list = activeList();
+  idx = (idx + 1) % list.length;
   render();
 });
 document.getElementById('markBtn').addEventListener('click', ()=>{
   const readSet = getReadSet();
-  const key = DEVOTIONALS[idx].id;
+  const key = activeList()[idx].id;
   if(readSet.has(key)) readSet.delete(key); else readSet.add(key);
   saveReadSet(readSet);
   render();
@@ -824,6 +2110,15 @@ document.getElementById('langToggle').addEventListener('click', (e)=>{
   render();
 });
 
+document.getElementById('trackToggle').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn || !btn.dataset.track || btn.dataset.track === track) return;
+  indices[track] = idx;
+  track = btn.dataset.track;
+  idx = indices[track] || 0;
+  render();
+});
+
 // --- share: builds the full devotional (ref, verse, title, body, questions) as plain text ---
 function stripHTML(html){
   const tmp = document.createElement('div');
@@ -831,7 +2126,7 @@ function stripHTML(html){
   return tmp.textContent || tmp.innerText || '';
 }
 function buildShareText(){
-  const d = DEVOTIONALS[idx][lang];
+  const d = activeList()[idx][lang];
   const ui = UI_TEXT[lang];
   const lines = [];
   lines.push(d.title);
@@ -966,9 +2261,18 @@ if (!isStandalone) {
   }
 }
 
-// open on today's devotional (rotates through the set by day-of-year)
-const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-idx = dayOfYear % DEVOTIONALS.length;
+// First visit opens on today's theme. After that, restore the last track and place.
+const savedPlace = loadPlace();
+if(savedPlace){
+  track = savedPlace.track;
+  indices.themes = Number.isInteger(savedPlace.themes) ? savedPlace.themes : 0;
+  indices.proverbs = Number.isInteger(savedPlace.proverbs) ? savedPlace.proverbs : 0;
+  idx = indices[track] || 0;
+} else {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  idx = dayOfYear % DEVOTIONALS.length;
+  indices.themes = idx;
+}
 
 render();
 
